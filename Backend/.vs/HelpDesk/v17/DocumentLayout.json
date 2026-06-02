@@ -1,0 +1,224 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\admin\\source\\repos\\HelpDesk\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|c:\\users\\admin\\source\\repos\\helpdesk\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|solutionrelative:models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|c:\\users\\admin\\source\\repos\\helpdesk\\models\\ticket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|solutionrelative:models\\ticket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|c:\\users\\admin\\source\\repos\\helpdesk\\models\\role.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|solutionrelative:models\\role.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|c:\\users\\admin\\source\\repos\\helpdesk\\models\\status.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|solutionrelative:models\\status.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|c:\\users\\admin\\source\\repos\\helpdesk\\models\\priority.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|solutionrelative:models\\priority.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|c:\\users\\admin\\source\\repos\\helpdesk\\models\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|solutionrelative:models\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|c:\\users\\admin\\source\\repos\\helpdesk\\models\\ticketattachment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|solutionrelative:models\\ticketattachment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|c:\\users\\admin\\source\\repos\\helpdesk\\models\\ticketcomment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|solutionrelative:models\\ticketcomment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|c:\\users\\admin\\source\\repos\\helpdesk\\models\\notification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|solutionrelative:models\\notification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|c:\\users\\admin\\source\\repos\\helpdesk\\models\\activitylog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|solutionrelative:models\\activitylog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|c:\\users\\admin\\source\\repos\\helpdesk\\data\\helpdeskdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|solutionrelative:data\\helpdeskdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|c:\\users\\admin\\source\\repos\\helpdesk\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{13B93692-98DF-4A77-B50C-875DB07C7FB5}|HelpDesk.csproj|solutionrelative:appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 7,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "TicketComment.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\HelpDesk\\Models\\TicketComment.cs",
+              "RelativeDocumentMoniker": "Models\\TicketComment.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\HelpDesk\\Models\\TicketComment.cs",
+              "RelativeToolTip": "Models\\TicketComment.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-29T08:23:59.622Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Category.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\HelpDesk\\Models\\Category.cs",
+              "RelativeDocumentMoniker": "Models\\Category.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\HelpDesk\\Models\\Category.cs",
+              "RelativeToolTip": "Models\\Category.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-29T08:22:36.749Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "TicketAttachment.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\HelpDesk\\Models\\TicketAttachment.cs",
+              "RelativeDocumentMoniker": "Models\\TicketAttachment.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\HelpDesk\\Models\\TicketAttachment.cs",
+              "RelativeToolTip": "Models\\TicketAttachment.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAowBIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-29T08:24:41.99Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Priority.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\HelpDesk\\Models\\Priority.cs",
+              "RelativeDocumentMoniker": "Models\\Priority.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\HelpDesk\\Models\\Priority.cs",
+              "RelativeToolTip": "Models\\Priority.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-29T08:22:58.786Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Status.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\HelpDesk\\Models\\Status.cs",
+              "RelativeDocumentMoniker": "Models\\Status.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\HelpDesk\\Models\\Status.cs",
+              "RelativeToolTip": "Models\\Status.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-29T08:23:09.665Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Role.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\HelpDesk\\Models\\Role.cs",
+              "RelativeDocumentMoniker": "Models\\Role.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\HelpDesk\\Models\\Role.cs",
+              "RelativeToolTip": "Models\\Role.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-29T08:22:03.19Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Ticket.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\HelpDesk\\Models\\Ticket.cs",
+              "RelativeDocumentMoniker": "Models\\Ticket.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\HelpDesk\\Models\\Ticket.cs",
+              "RelativeToolTip": "Models\\Ticket.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAqwCcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-29T08:21:46.818Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\HelpDesk\\Models\\User.cs",
+              "RelativeDocumentMoniker": "Models\\User.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\HelpDesk\\Models\\User.cs",
+              "RelativeToolTip": "Models\\User.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-29T07:59:20.604Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Notification.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\HelpDesk\\Models\\Notification.cs",
+              "RelativeDocumentMoniker": "Models\\Notification.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\HelpDesk\\Models\\Notification.cs",
+              "RelativeToolTip": "Models\\Notification.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAowBIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-29T08:25:04.244Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ActivityLog.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\HelpDesk\\Models\\ActivityLog.cs",
+              "RelativeDocumentMoniker": "Models\\ActivityLog.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\HelpDesk\\Models\\ActivityLog.cs",
+              "RelativeToolTip": "Models\\ActivityLog.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAowBIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-29T08:25:20.635Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "HelpDeskDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\HelpDesk\\Data\\HelpDeskDbContext.cs",
+              "RelativeDocumentMoniker": "Data\\HelpDeskDbContext.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\HelpDesk\\Data\\HelpDeskDbContext.cs",
+              "RelativeToolTip": "Data\\HelpDeskDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAmwBcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-29T07:47:43.884Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\HelpDesk\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "appsettings.Development.json",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\HelpDesk\\appsettings.Development.json",
+              "RelativeToolTip": "appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAADMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-05-29T07:49:23.941Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
