@@ -3,17 +3,20 @@ using System;
 using HelpDesk.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace HelpDesk.Migrations
+namespace HelpDesk.Infrastructure.Migrations
 {
     [DbContext(typeof(HelpDeskDbContext))]
-    partial class HelpDeskDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260603142502_SeedRolesAndAdminUser")]
+    partial class SeedRolesAndAdminUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,6 +136,28 @@ namespace HelpDesk.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "IT Support Agent"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Employee"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Manager"
+                        });
                 });
 
             modelBuilder.Entity("HelpDesk.Models.Status", b =>
@@ -294,6 +319,17 @@ namespace HelpDesk.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("99999999-9999-9999-9999-999999999999"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "admin@helpdesk.com",
+                            FullName = "System Administrator",
+                            Password = "Admin123!",
+                            RoleId = 1
+                        });
                 });
 
             modelBuilder.Entity("HelpDesk.Models.ActivityLog", b =>
