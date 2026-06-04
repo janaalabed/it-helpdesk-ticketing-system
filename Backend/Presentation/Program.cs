@@ -22,11 +22,13 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
-        policy.WithOrigins("http://localhost:5173") // Your React URL
+        policy.WithOrigins("http://localhost:5173") 
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
 });
+//register the created jwt service 
+builder.Services.AddScoped<HelpDesk.Infrastructure.Security.JwtTokenGenerator>();
 
 var app = builder.Build();
 
