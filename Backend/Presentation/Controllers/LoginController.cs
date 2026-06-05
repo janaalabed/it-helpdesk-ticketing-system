@@ -20,25 +20,42 @@ namespace HelpDesk.Controllers
         }
  
 
-
         [HttpPost]//Specifies the HTTP verb
         public async Task<IActionResult> Login(loginDto myDto) //IActionResult allows the return of type above methods
         {
+
             var user = await _db.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Email == myDto.Email);
 
-            if (user == null || myDto.Password != user.Password) {
+            if (user == null || !BCrypt.Net.BCrypt.Verify(myDto.Password, user.Password))
+            {
                 return Unauthorized(new { message = "Invalid Credentials" });
             }
 
-            //user credentials are valid, create the token 
+            //bool isPasswordValid = false;
+            //if (user != null)
+            //{
+            //    if (user.Email == "admin@helpdesk.com" && myDto.Password == "Admin123!")
+            //    {
+            //        isPasswordValid = true;
+            //    }
+            //    else
+            //    {
+            //        isPasswordValid = BCrypt.Net.BCrypt.Verify(myDto.Password, user.Password);
+            //    }
+            //}
+
+            //if (user == null || !isPasswordValid)
+            //{
+            //    return Unauthorized(new { message = "Invalid Credentials" });
+            //}
+
+            // User credentials are valid, create the token 
             var rolename = user.Role.Name;
             var myEmail = user.Email;
-            var tokenString = _jwtGenerator.GenerateToken(user,rolename);
+            var tokenString = _jwtGenerator.GenerateToken(user, rolename);
 
+            return Ok(new { token = tokenString, email = myEmail, role = rolename });
 
-            return Ok( new {token =  tokenString ,email =myEmail,  role = rolename});
-
-       
         }
     
     }

@@ -28,6 +28,7 @@ export function Login() {
 
             if (response.ok) {
                 localStorage.setItem("token", data.token);
+                localStorage.setItem("role", data.role);
                 alert("Login successful!");
                 navigate("/dashboard");
             } else {

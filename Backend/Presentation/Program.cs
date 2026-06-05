@@ -32,6 +32,7 @@ builder.Services.AddScoped<HelpDesk.Infrastructure.Security.JwtTokenGenerator>()
 
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -45,5 +46,7 @@ app.UseCors("AllowReactApp");
 app.UseAuthorization();
 
 app.MapControllers();
+
+//Console.WriteLine(BCrypt.Net.BCrypt.HashPassword("Admin123!"));
 
 app.Run();

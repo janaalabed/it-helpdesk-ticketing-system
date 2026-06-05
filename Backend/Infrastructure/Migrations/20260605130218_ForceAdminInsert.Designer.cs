@@ -3,17 +3,20 @@ using System;
 using HelpDesk.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace HelpDesk.Migrations
+namespace HelpDesk.Infrastructure.Migrations
 {
     [DbContext(typeof(HelpDeskDbContext))]
-    partial class HelpDeskDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260605130218_ForceAdminInsert")]
+    partial class ForceAdminInsert
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -405,7 +408,7 @@ namespace HelpDesk.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "admin@helpdesk.com",
                             FullName = "Jawad Admin",
-                            Password = "$2a$11$5va6AQc5S7035j1b2OqBhuK/N0Czr/uSJs5E0uqi0rMQuSWxBNRPG",
+                            Password = "$2a$11$clYgGZ2Z2XbXUvFv7eKfeO76n4A5K.4R5U3Pz9wWk6bY3vFv7eKfe",
                             RoleId = 1
                         });
                 });
