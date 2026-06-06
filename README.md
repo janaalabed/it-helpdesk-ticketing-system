@@ -6,7 +6,7 @@ A modern, web-based enterprise SaaS platform designed to streamline internal tec
 
 ## Tech Stack
 
-- **Frontend:** React.js, Tailwind CSS
+- **Frontend:** React.js (React Router), Tailwind CSS
 - **Backend:** ASP.NET Core Web API (EF migrations)
 - **Database:** PostgreSQL
 - **Authentication:** JWT Authentication
