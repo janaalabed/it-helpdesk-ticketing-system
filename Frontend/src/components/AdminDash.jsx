@@ -1,17 +1,17 @@
 import { useState } from "react";
 
 export function AdminDashboard() {
-    const [name,setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password,setPassword] = useState("");
-    const [role,setRole] = useState("");
+    const [Fullname,setName] = useState("");
+    const [Email, setEmail] = useState("");
+    const [Password,setPassword] = useState("");
+    const [RoleId,setRole] = useState("");
     
    async function addUser() {
         const user = {
-            name,
-            email,
-            password,
-            role
+            Fullname,
+            Email,
+            Password,
+            RoleId: parseInt(RoleId)
        };
        
        const token = localStorage.getItem("token");
@@ -32,7 +32,10 @@ export function AdminDashboard() {
             alert("user created successfully");
         }
         else {
-            alert("failed to create new user");
+            
+    const errorText = await response.text();
+    console.error("Status:", response.status, errorText);
+    alert(`failed: ${response.status} - ${errorText}`);
         }
          } catch (error) {
             console.error(error);
@@ -44,13 +47,13 @@ export function AdminDashboard() {
         <h1>Welcome to admin dashboard</h1>
          
             <label>Name</label>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+            <input type="text" value={Fullname} onChange={(e) => setName(e.target.value)} />
             <label>Email</label>      
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input type="email" value={Email} onChange={(e) => setEmail(e.target.value)} />
             <label>Password</label>           
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <input type="password" value={Password} onChange={(e) => setPassword(e.target.value)} />
             <select
-                value={role} onChange={(e) => setRole(e.target.value)}>
+                value={RoleId} onChange={(e) => setRole(e.target.value)}>
                 <option value="">Select a Role</option>
                 <option value="3">Employee</option>
                 <option value="4">Manager</option>
