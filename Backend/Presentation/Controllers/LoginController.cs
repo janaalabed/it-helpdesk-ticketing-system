@@ -31,24 +31,6 @@ namespace HelpDesk.Controllers
                 return Unauthorized(new { message = "Invalid Credentials" });
             }
 
-            //bool isPasswordValid = false;
-            //if (user != null)
-            //{
-            //    if (user.Email == "admin@helpdesk.com" && myDto.Password == "Admin123!")
-            //    {
-            //        isPasswordValid = true;
-            //    }
-            //    else
-            //    {
-            //        isPasswordValid = BCrypt.Net.BCrypt.Verify(myDto.Password, user.Password);
-            //    }
-            //}
-
-            //if (user == null || !isPasswordValid)
-            //{
-            //    return Unauthorized(new { message = "Invalid Credentials" });
-            //}
-
             // User credentials are valid, create the token 
             var rolename = user.Role.Name;
             var myEmail = user.Email;
