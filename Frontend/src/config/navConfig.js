@@ -2,12 +2,12 @@ export const Links = [
     {
         label: "Dashboard",
         path: "/dashboard",
-        allowedRoles: ["Admin", "Manager", "It Support Agent", "Employee"]
+        allowedRoles: ["Admin", "Manager", "IT Support Agent", "Employee"]
     },
     {
         label: "New Ticket",
         path: "/dashboard/NewTicket",
-        allowedRoles: ["Admin", "Manager", "It Support Agent", "Employee"]
+        allowedRoles: ["Admin", "Manager", "IT Support Agent", "Employee"]
     },
     {
         label: "Tickets",
@@ -17,12 +17,12 @@ export const Links = [
     {
         label: "My Tickets",
         path: "/dashboard/MyTickets",
-        allowedRoles: ["It Support Agent"]
+        allowedRoles: ["IT Support Agent","Manager"]
     },
     {
         label: "Notifications",
         path: "/dashboard/Notifications",
-        allowedRoles: ["Admin", "Manager", "It Support Agent", "Employee"]
+        allowedRoles: ["Admin", "Manager", "IT Support Agent", "Employee"]
     },
         {
         label: "Users",
@@ -42,7 +42,7 @@ export const Links = [
          {
         label: "Profile",
         path: "/dashboard/Profile",
-        allowedRoles: ["Admin", "Manager", "It Support Agent", "Employee"]
+        allowedRoles: ["Admin", "Manager", "IT Support Agent", "Employee"]
     },
     {
         label: "Settings",

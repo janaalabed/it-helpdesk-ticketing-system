@@ -22,7 +22,7 @@ function App() {
         <Route index element={<DashboardPage />} /> {/* ← no path here */}
         <Route path="NewTicket" element={<NewTicket />} />
         <Route path="Tickets" element={<Tickets />} />
-        <Route path="MyTickets" element={<MyTickets />} />
+        <Route path="myTickets" element={<MyTickets />} />
         <Route path="Notifications" element={<Notifications />} />
         <Route path="Users" element={<Users />} />
         <Route path="Reports" element={<Reports />} />

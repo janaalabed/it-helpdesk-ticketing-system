@@ -5,7 +5,7 @@ export function DashboardLayout() {
   const role = localStorage.getItem("role");
 
   return (
-    <div className="flex min-h-screen bg-[#0F172A]">
+    <div className="flex min-h-screen bg-[#F8FAFC]">
       {/* Sidebar — fixed, never re-mounts */}
       <SideBar role={role} />
 
