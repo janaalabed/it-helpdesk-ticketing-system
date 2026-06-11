@@ -1,6 +1,7 @@
 using HelpDesk.Data;
-using Microsoft.EntityFrameworkCore;
+//using HelpDesk.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer; 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;               
 using System.Text;
 
@@ -58,6 +59,11 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    //// Program.cs - only in dev. shilyn bs taamle test w ymshe hal get tickets endpoint!!
+    //using var scope = app.Services.CreateScope();
+    //var db = scope.ServiceProvider.GetRequiredService<HelpDeskDbContext>();
+    //await SeedData.SeedTicketsAsync(db);
 }
 
 app.UseHttpsRedirection();

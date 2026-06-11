@@ -50,6 +50,14 @@ To maintain a consistent, accessible enterprise layout, follow these precise UI 
 | **Cyan 400**  | `#22D3EE`             | Hover states, highlights over dark backgrounds            |
 | **Cyan 50**   | `#ECFEFF`             | Light alerts, background accents                          |
 
+### Typography
+
+- **Font Family:** Inter, system-ui, sans-serif
+- **Page Heading (H1):** `20px` | Weight 500 | Slate-900
+- **Section Heading (H2):** `14px` | Weight 500 | Slate-800
+- **Body Text:** `13px` | Weight 400 | Slate-700
+- **Muted / Label:** `11px` | Weight 400 | Slate-500
+
 ### Semantic Status Colors
 
 These statuses must remain color-consistent across lists, filter blocks, and detail pages:
@@ -59,14 +67,6 @@ These statuses must remain color-consistent across lists, filter blocks, and det
 - 🟣 **Pending:** Violet
 - 🟢 **Resolved:** Green
 - 🔴 **Critical / Closed:** Red
-
-### Typography
-
-- **Font Family:** Inter, system-ui, sans-serif
-- **Page Heading (H1):** `20px` | Weight 500 | Slate-900
-- **Section Heading (H2):** `14px` | Weight 500 | Slate-800
-- **Body Text:** `13px` | Weight 400 | Slate-700
-- **Muted / Label:** `11px` | Weight 400 | Slate-500
 
 ---
 

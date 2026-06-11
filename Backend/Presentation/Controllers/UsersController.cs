@@ -3,12 +3,13 @@ using HelpDesk.Data;
 using HelpDesk.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HelpDesk.Presentation.Controllers
 {
     [Authorize(Roles = "Admin")] //authorization checks ! , it can have more than one role : Admin,Manager..
     [ApiController]
-    [Route("api/[Controller]")]
+    [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
         HelpDeskDbContext _db ;
@@ -33,6 +34,24 @@ namespace HelpDesk.Presentation.Controllers
             await _db.SaveChangesAsync();
             return Ok(newUser);
 
+        }
+
+        [HttpGet]     
+        public async Task<IActionResult> getUsers()
+        {
+            //join act
+            var users = _db.Users.Include(u => u.Role).Select(u => new
+            {
+                u.Id,
+                u.FullName,
+                u.Email,
+                Role = u.Role.Name
+            }).ToList();
+            if (users.Count > 0)
+            {
+                return Ok(users);
+            }
+            return Ok(new { Message = "no users found" });
         }
 
 
