@@ -28,12 +28,12 @@ export function Login() {
             );
 
             const data = await response.json();
-
             if (response.ok) {
-                localStorage.setItem("token", data.token);
-                localStorage.setItem("role", data.role);
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("role", data.role);
+            localStorage.setItem("userId", data.id);
 
-                navigate("/dashboard");
+            navigate("/dashboard");
             } else {
                 alert(data.message);
             }
