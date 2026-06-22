@@ -18,24 +18,31 @@ namespace HelpDesk.Presentation.Controllers
         }
         [HttpGet]
         [Authorize(Roles = "Employee,Admin,Manager")]
-        public async Task<IActionResult> getTickets()
+        public async Task<IActionResult> getTickets([FromQuery] string? category = null, [FromQuery] string? status = null, [FromQuery] string? priority = null)
         {
-            var tickets = _db.Tickets
-                .Select( t => new
-                {
-                    t.Id,
-                    t.Title,
-                    t.Description,
-                    t.ReferenceNo,
-                    SubmittedByUser = t.SubmittedByUser.FullName,
-                   AssignedToUser =  t.AssignedToUser.FullName,
-                    Status = t.Status.Label,
-                    Priority = t.Priority.Level,
-                    Category = t.Category.Name,
-                    t.CreatedAt,
-                    t.UpdatedAt
+            var query = _db.Tickets.AsQueryable();
 
-                }).ToList();
+            if (!string.IsNullOrEmpty(category))
+                query = query.Where(t => t.Category.Name == category);
+            if (!string.IsNullOrEmpty(status))
+                    query = query.Where(s=> s.Status.Label ==  status);
+            if (!string.IsNullOrEmpty(priority))
+                query = query.Where(p => p.Priority.Level == priority);
+
+            var tickets =  query.Select(t => new
+            {
+                t.Id,
+                t.Title,
+                t.Description,
+                t.ReferenceNo,
+                SubmittedByUser = t.SubmittedByUser.FullName,
+                AssignedToUser = t.AssignedToUser.FullName,
+                Status = t.Status.Label,
+                Priority = t.Priority.Level,
+                Category = t.Category.Name,
+                t.CreatedAt,
+                t.UpdatedAt
+            }).ToList();
 
             return Ok(tickets);
         }
