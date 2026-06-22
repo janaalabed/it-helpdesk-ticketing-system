@@ -39,7 +39,6 @@ namespace HelpDesk.Presentation.Controllers
         [HttpGet]     
         public async Task<IActionResult> getUsers()
         {
-            //join act
             var users = _db.Users.Include(u => u.Role).Select(u => new
             {
                 u.Id,
