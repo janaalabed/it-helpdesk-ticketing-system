@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useEffect } from "react";
+import { Filters } from "../components/Filters";
 export function MyTickets() {
   const [tickets, setTickets] = useState([]);
   const token = localStorage.getItem("token");
@@ -29,6 +30,7 @@ export function MyTickets() {
 
   return (
     <>
+      <Filters />
       {/* Page Heading: 20px | Weight 500 | Slate-900 */}
       <h1 className="text-[20px] font-medium text-[#1E2A38] mb-6">
         welcome to Tickets page
