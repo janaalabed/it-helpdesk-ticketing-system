@@ -68,7 +68,23 @@ export function EmployeeDashboard() {
     alert("Could not create ticket");
     }
 }
+async function deleteTicket(id) {
+  const confirmDelete = window.confirm("Delete this ticket?");
+  if (!confirmDelete) return;
 
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+
+  if (response.ok) {
+    loadTickets();
+  } else {
+    alert("Could not delete ticket");
+  }
+}
   return (
     <div className="min-h-screen bg-slate-50 p-6 font-sans text-slate-800">
       <div className="mb-6">
@@ -156,7 +172,8 @@ export function EmployeeDashboard() {
       <div className="rounded-lg border border-slate-200 bg-white">
         <div className="border-b border-slate-200 p-4">
           <h2 className="text-sm font-medium text-slate-800">My Tickets</h2>
-        </div>
+
+    </div>
 
         <div className="divide-y divide-slate-200">
           {tickets.map((ticket) => (
@@ -174,6 +191,13 @@ export function EmployeeDashboard() {
                 Category: {ticket.categoryId} | Priority: {ticket.priorityId} |
                 Status: {ticket.statusId}
               </div>
+              <button
+                type="button"
+                onClick={() => deleteTicket(ticket.id)}
+                className="mt-3 rounded-md border border-red-300 px-3 py-1 text-xs text-red-600"
+              >
+                Delete
+                </button>
             </div>
           ))}
         </div>
