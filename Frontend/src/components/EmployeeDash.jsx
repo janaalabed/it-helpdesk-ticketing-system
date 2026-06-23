@@ -85,6 +85,41 @@ async function deleteTicket(id) {
     alert("Could not delete ticket");
   }
 }
+async function updateTicket(ticket) {
+  const newTitle = window.prompt("Edit title:", ticket.title);
+  if (!newTitle) return;
+
+  const newDescription = window.prompt("Edit description:", ticket.description);
+  if (!newDescription) return;
+
+  const updatedTicket = {
+    ...ticket,
+    title: newTitle,
+    description: newDescription,
+    submittedBy: ticket.submittedBy,
+    assignedTo: ticket.assignedTo,
+    categoryId: ticket.categoryId,
+    priorityId: ticket.priorityId,
+    statusId: ticket.statusId,
+  };
+
+  const response = await fetch(`${API_URL}/${ticket.id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+    body: JSON.stringify(updatedTicket),
+  });
+
+  if (response.ok) {
+    loadTickets();
+  } else {
+    const errorText = await response.text();
+    console.error("PUT ticket failed:", response.status, errorText);
+    alert("Could not update ticket");
+  }
+}
   return (
     <div className="min-h-screen bg-slate-50 p-6 font-sans text-slate-800">
       <div className="mb-6">
@@ -191,6 +226,13 @@ async function deleteTicket(id) {
                 Category: {ticket.categoryId} | Priority: {ticket.priorityId} |
                 Status: {ticket.statusId}
               </div>
+              <button
+                type="button"
+                onClick={() => updateTicket(ticket)}
+                className="mt-3 mr-2 rounded-md border border-blue-300 px-3 py-1 text-xs text-blue-600"
+            >
+                Edit
+            </button>
               <button
                 type="button"
                 onClick={() => deleteTicket(ticket.id)}
