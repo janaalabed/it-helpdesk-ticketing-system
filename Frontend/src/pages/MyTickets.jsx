@@ -1,142 +1,311 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Filters } from "../components/Filters";
-export function MyTickets() {
-  const [tickets, setTickets] = useState([]);
-  const token = localStorage.getItem("token");
-  useEffect(() => {
-    getTicketById();
-  }, []);
 
-  async function getTicketById() {
+const formatDate = (dateStr) => {
+  if (!dateStr) return "—";
+  return new Date(dateStr).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+};
+
+const token = localStorage.getItem("token");
+
+const getStatusStyles = (status) => {
+  switch (status?.toLowerCase()) {
+    case "open":
+      return "bg-[#ECFEFF] text-[#06B6D4]";
+    case "in progress":
+      return "bg-[#FEF3C7] text-[#D97706]";
+    case "pending":
+      return "bg-[#F3E8FF] text-[#7C3AED]";
+    case "resolved":
+      return "bg-[#DCFCE7] text-[#16A34A]";
+    case "critical":
+    case "closed":
+      return "bg-[#FEE2E2] text-[#DC2626]";
+    default:
+      return "bg-[#F1F5F9] text-[#475569]";
+  }
+};
+
+const getPriorityStyles = (priority) => {
+  switch (priority?.toLowerCase()) {
+    case "low":
+      return "bg-[#F1F5F9] text-[#475569]";
+    case "medium":
+    case "normal":
+      return "bg-[#FEF3C7] text-[#D97706]";
+    case "high":
+    case "urgent":
+    case "critical":
+      return "bg-[#FEE2E2] text-[#DC2626] font-semibold";
+    default:
+      return "bg-[#F1F5F9] text-[#2D3E52]";
+  }
+};
+
+// ─── Modal ────────────────────────────────────────────────────────────────────
+function TicketModal({ ticket, onClose, onTicketClosed }) {
+  if (!ticket) return null;
+
+  const isHighPriority = ["high", "urgent", "critical"].includes(
+    ticket.priority?.toLowerCase(),
+  );
+
+  const isClosed = ticket.status?.toLowerCase() === "closed";
+
+  async function closeTicket() {
     try {
       const response = await fetch(
-        "https://localhost:7010/api/ticket/myTickets",
+        `https://localhost:7010/api/ticket/${ticket.id}/changeStatus`,
         {
-          method: "Get",
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         },
       );
-      const data = await response.json();
-      console.log(data);
-      setTickets(data);
+
+      if (response.ok) {
+        alert("Ticket closed successfully");
+        onClose();
+        onTicketClosed();
+      } else {
+        const error = await response.text();
+        alert(`Failed: ${error}`);
+      }
     } catch (error) {
       console.error("Network or parse error:", error);
+      alert("Server error");
     }
   }
 
   return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#1E2A38]/40 px-[16px]"
+      onClick={onClose}
+    >
+      <div
+        className="relative w-full max-w-lg bg-white rounded-[12px] border border-[#E2E8F0] shadow-lg overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* cyan accent top bar for high priority */}
+        {isHighPriority && <div className="h-[3px] w-full bg-[#06B6D4]" />}
+
+        {/* header */}
+        <div className="flex items-start justify-between gap-3 px-[20px] pt-[20px] pb-[14px] border-b border-[#E2E8F0]">
+          <div className="min-w-0">
+            <span className="text-[11px] font-mono text-[#94A3B8] block mb-[4px]">
+              {ticket.referenceNo || `#${ticket.id}`}
+            </span>
+            <h2 className="text-[16px] font-medium text-[#2D3E52] leading-snug">
+              {ticket.title}
+            </h2>
+          </div>
+          <button
+            onClick={onClose}
+            className="flex-shrink-0 w-[28px] h-[28px] flex items-center justify-center rounded-[6px] text-[#94A3B8] hover:bg-[#F1F5F9] hover:text-[#475569] transition-colors text-[18px] leading-none"
+          >
+            ×
+          </button>
+        </div>
+
+        {/* body */}
+        <div className="px-[20px] py-[16px] space-y-[16px]">
+          {/* badges row */}
+          <div className="flex flex-wrap gap-[6px]">
+            <span
+              className={`text-[11px] px-[8px] py-[3px] rounded-full font-medium uppercase tracking-wider ${getStatusStyles(ticket.status)}`}
+            >
+              {ticket.status}
+            </span>
+            <span
+              className={`text-[11px] px-[8px] py-[3px] rounded-full uppercase tracking-wider ${getPriorityStyles(ticket.priority)}`}
+            >
+              {ticket.priority} Priority
+            </span>
+            <span className="text-[11px] px-[8px] py-[3px] rounded-full bg-[#F1F5F9] text-[#475569] uppercase tracking-wider">
+              {ticket.category}
+            </span>
+          </div>
+
+          {/* description */}
+          <div>
+            <p className="text-[11px] font-medium text-[#94A3B8] uppercase tracking-wider mb-[6px]">
+              Description
+            </p>
+            <p className="text-[13px] text-[#475569] leading-relaxed">
+              {ticket.description || "No description provided."}
+            </p>
+          </div>
+
+          {/* people */}
+          <div className="grid grid-cols-2 gap-[12px]">
+            <div className="bg-[#F8FAFC] rounded-[6px] p-[10px]">
+              <p className="text-[10px] text-[#94A3B8] uppercase tracking-wider mb-[2px]">
+                Submitted By
+              </p>
+              <p className="text-[13px] font-medium text-[#2D3E52] truncate">
+                {ticket.submittedByUser || "—"}
+              </p>
+            </div>
+            <div className="bg-[#F8FAFC] rounded-[6px] p-[10px]">
+              <p className="text-[10px] text-[#94A3B8] uppercase tracking-wider mb-[2px]">
+                Assigned To
+              </p>
+              <p className="text-[13px] font-medium text-[#2D3E52] truncate">
+                {ticket.assignedToUser || "Unassigned"}
+              </p>
+            </div>
+          </div>
+
+          {/* timestamps */}
+          <div className="flex justify-between text-[11px] text-[#94A3B8] pt-[4px] border-t border-[#F1F5F9]">
+            <span>Created: {formatDate(ticket.createdAt)}</span>
+            {ticket.updatedAt && (
+              <span>Updated: {formatDate(ticket.updatedAt)}</span>
+            )}
+          </div>
+
+          {/* footer actions */}
+          <div className="flex justify-end pt-[4px]">
+            {isClosed ? (
+              // ticket already closed — show a disabled read-only badge
+              <span className="h-[34px] px-[14px] text-[12px] font-medium text-[#94A3B8] bg-[#F1F5F9] rounded-[6px] border border-[#E2E8F0] flex items-center">
+                Ticket Closed
+              </span>
+            ) : (
+              <button
+                onClick={closeTicket}
+                className="h-[34px] px-[14px] text-[12px] font-medium text-[#DC2626] bg-[#FEE2E2] hover:bg-[#FCA5A5] rounded-[6px] border border-[#FCA5A5] transition-colors duration-150"
+              >
+                Close Ticket
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main Page ────────────────────────────────────────────────────────────────
+export function MyTickets() {
+  const [tickets, setTickets] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedPriority, setSelectedPriority] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedTicket, setSelectedTicket] = useState(null);
+
+  useEffect(() => {
+    getTickets();
+  }, [selectedCategory, selectedPriority, selectedStatus]);
+
+  const buildUrl = () => {
+    const params = new URLSearchParams();
+    if (selectedCategory) params.append("category", selectedCategory);
+    if (selectedPriority) params.append("priority", selectedPriority);
+    if (selectedStatus) params.append("status", selectedStatus);
+    const query = params.toString();
+    return query
+      ? `https://localhost:7010/api/ticket?${query}`
+      : `https://localhost:7010/api/ticket`;
+  };
+
+  const getTickets = async () => {
+    try {
+      const response = await fetch(buildUrl(), {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      setTickets(data);
+    } catch (error) {
+      console.error("Network or parse error:", error);
+    }
+  };
+
+  return (
     <>
-      <Filters />
-      {/* Page Heading: 20px | Weight 500 | Slate-900 */}
-      <h1 className="text-[20px] font-medium text-[#1E2A38] mb-6">
-        welcome to Tickets page
-      </h1>
+      {/* Modal */}
+      <TicketModal
+        ticket={selectedTicket}
+        onClose={() => setSelectedTicket(null)}
+        onTicketClosed={getTickets}
+      />
 
-      {/* Responsive Grid Container */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {/* Filters */}
+      <div className="mb-[16px]">
+        <Filters
+          selectedCategory={selectedCategory}
+          selectedPriority={selectedPriority}
+          selectedStatus={selectedStatus}
+          onCategoryChange={setSelectedCategory}
+          onPriorityChange={setSelectedPriority}
+          onStatusChange={setSelectedStatus}
+        />
+      </div>
+
+      {/* Ticket count */}
+      <p className="text-[11px] text-[#94A3B8] mb-[10px]">
+        {tickets.length} {tickets.length === 1 ? "ticket" : "tickets"}
+      </p>
+
+      {/* Ticket rows */}
+      <div className="flex flex-col gap-[6px]">
         {tickets.map((ticket) => {
-          // Apply left accent border in Cyan for highest priority statistics/tickets
-          const isHighPriority =
-            ticket.priority?.toLowerCase() === "high" ||
-            ticket.priority?.toLowerCase() === "urgent" ||
-            ticket.priority?.toLowerCase() === "critical";
-
-          // Dynamic Semantic Status Color mapping matching the design spec
-          const statusStyles =
-            {
-              open: "bg-[#ECFEFF] text-[#06B6D4]", // Cyan
-              "in progress": "bg-[#FEF3C7] text-[#D97706]", // Amber
-              pending: "bg-[#F3E8FF] text-[#7C3AED]", // Violet
-              resolved: "bg-[#DCFCE7] text-[#16A34A]", // Green
-              critical: "bg-[#FEE2E2] text-[#DC2626]", // Red
-              closed: "bg-[#FEE2E2] text-[#DC2626]", // Red
-            }[ticket.status?.toLowerCase()] || "bg-[#F1F5F9] text-[#475569]";
-
-          // Dynamic Semantic Priority Color mapping matching status color rules
-          const priorityStyles =
-            {
-              low: "bg-[#F1F5F9] text-[#475569]", // Neutral Slate
-              medium: "bg-[#FEF3C7] text-[#D97706]", // Warning Amber
-              normal: "bg-[#FEF3C7] text-[#D97706]", // Warning Amber
-              high: "bg-[#FEE2E2] text-[#DC2626] font-semibold", // Alarm Red
-              urgent: "bg-[#FEE2E2] text-[#DC2626] font-semibold", // Alarm Red
-              critical: "bg-[#FEE2E2] text-[#DC2626] font-semibold", // Alarm Red
-            }[ticket.priority?.toLowerCase()] || "bg-[#F1F5F9] text-[#2D3E52]";
+          const isHighPriority = ["high", "urgent", "critical"].includes(
+            ticket.priority?.toLowerCase(),
+          );
 
           return (
             <div
               key={ticket.id}
-              className={`flex flex-col justify-between bg-white rounded-[8px] border border-[#E2E8F0] p-[14px] shadow-sm transition-all hover:shadow-md ${
-                isHighPriority ? "border-l-[4px] border-l-[#06B6D4]" : ""
-              }`}
+              onClick={() => setSelectedTicket(ticket)}
+              className={`flex items-center justify-between gap-3 bg-white border border-[#E2E8F0] rounded-[8px] px-[16px] py-[12px] cursor-pointer hover:border-[#06B6D4] hover:shadow-sm transition-all duration-150
+                ${isHighPriority ? "border-l-[3px] border-l-[#06B6D4]" : ""}`}
             >
-              <div>
-                {/* Upper Metadata Row */}
-                <div className="flex items-center justify-between gap-2 mb-2.5">
-                  {/* Muted / Label: 11px | Weight 400 | Slate-500 */}
-                  <span className="text-[11px] font-normal text-[#94A3B8] tracking-wider font-mono">
-                    {ticket.referenceNo}
-                  </span>
-                  {/* Semantic Status Badge */}
-                  <span
-                    className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide ${statusStyles}`}
-                  >
-                    {ticket.status}
-                  </span>
-                </div>
-
-                {/* Title - Section Heading (H2): 14px | Weight 500 | Slate-800 */}
-                <h2 className="text-[14px] font-medium text-[#2D3E52] mb-1 line-clamp-1">
+              {/* left: ref + title */}
+              <div className="flex items-center gap-[12px] min-w-0">
+                <span className="text-[11px] font-mono text-[#94A3B8] flex-shrink-0 hidden sm:block">
+                  {ticket.referenceNo || `#${ticket.id}`}
+                </span>
+                <p className="text-[13px] font-medium text-[#2D3E52] truncate">
                   {ticket.title}
-                </h2>
-
-                {/* Description - Body Text: 13px | Weight 400 | Slate-700 */}
-                <p className="text-[13px] font-normal text-[#475569] line-clamp-2 mb-4 leading-relaxed">
-                  {ticket.description}
                 </p>
               </div>
 
-              {/* Bottom Panel Block */}
-              <div className="mt-auto pt-3 border-t border-[#F1F5F9] space-y-2.5">
-                {/* Badges Layout Row */}
-                <div className="flex flex-wrap gap-1.5">
-                  {/* Dynamic Priority Indicator */}
-                  <span
-                    className={`text-[11px] px-2 py-0.5 rounded uppercase tracking-wide ${priorityStyles}`}
-                  >
-                    {ticket.priority} Priority
-                  </span>
-                  {/* Category Indicator */}
-                  <span className="text-[11px] font-normal px-2 py-0.5 bg-[#F1F5F9] text-[#475569] rounded uppercase tracking-wide">
-                    {ticket.category}
-                  </span>
-                </div>
-
-                {/* Creator & Timeline Footer Panel */}
-                <div className="flex flex-col gap-1 text-[11px] text-[#94A3B8]">
-                  <div className="flex justify-between items-center">
-                    <span>
-                      By:{" "}
-                      <strong className="font-medium text-[#475569]">
-                        {ticket.submittedByUser}
-                      </strong>
-                    </span>
-                    <span>Created: {ticket.createdAt}</span>
-                  </div>
-                  {ticket.updatedAt && (
-                    <div className="text-right text-[10px] italic">
-                      Updated: {ticket.updatedAt}
-                    </div>
-                  )}
-                </div>
+              {/* right: badges + date */}
+              <div className="flex items-center gap-[8px] flex-shrink-0">
+                <span
+                  className={`hidden sm:inline-flex text-[11px] px-[8px] py-[2px] rounded-full font-medium uppercase tracking-wider ${getPriorityStyles(ticket.priority)}`}
+                >
+                  {ticket.priority}
+                </span>
+                <span
+                  className={`inline-flex text-[11px] px-[8px] py-[2px] rounded-full font-medium uppercase tracking-wider ${getStatusStyles(ticket.status)}`}
+                >
+                  {ticket.status}
+                </span>
+                <span className="hidden md:block text-[11px] text-[#94A3B8]">
+                  {formatDate(ticket.createdAt)}
+                </span>
               </div>
             </div>
           );
         })}
+
+        {tickets.length === 0 && (
+          <p className="text-[13px] text-[#94A3B8] text-center py-[40px]">
+            No tickets found.
+          </p>
+        )}
       </div>
     </>
   );

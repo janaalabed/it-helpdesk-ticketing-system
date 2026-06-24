@@ -1,4 +1,5 @@
-﻿using HelpDesk.Models;
+﻿using HelpDesk.Core.Models;
+using HelpDesk.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace HelpDesk.Data
@@ -20,7 +21,7 @@ namespace HelpDesk.Data
         public DbSet<TicketAttachment> TicketAttachments => Set<TicketAttachment>();
         public DbSet<TicketComment> TicketComments => Set<TicketComment>();
         public DbSet<ActivityLog> ActivityLogs => Set<ActivityLog>();
-
+        public DbSet<KnowledgeBaseArticle> KnowledgeBaseArticles => Set<KnowledgeBaseArticle>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

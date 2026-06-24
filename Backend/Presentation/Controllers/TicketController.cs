@@ -2,6 +2,7 @@
 using HelpDesk.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace HelpDesk.Presentation.Controllers
@@ -73,6 +74,22 @@ namespace HelpDesk.Presentation.Controllers
                 }).ToList();
 
             return Ok(myTicket);
+        }
+
+        [HttpPatch("{id}/changeStatus")]
+        [Authorize(Roles = "IT Support Agent,Manager")]
+        public async Task<IActionResult> changeTicketStatus(Guid id)
+        {
+            var ticket =  _db.Tickets.FirstOrDefault(t => t.Id == id);
+            if (ticket == null) return NotFound("Ticket not found");
+            var closedStatus = await _db.Statuses.FirstOrDefaultAsync(s => s.Label.ToLower() == "closed");
+            if(closedStatus == null) return StatusCode(500, "Closed status not found in database");
+
+            ticket.StatusId = closedStatus.Id;
+            ticket.UpdatedAt = DateTime.UtcNow;
+            await _db.SaveChangesAsync();
+
+            return Ok(new { message = "Ticket closed successfully" });
         }
     }
 }

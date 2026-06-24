@@ -9,11 +9,11 @@ namespace HelpDesk.Presentation.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SettingsController : ControllerBase
+    public class ProfileController : ControllerBase
     {
         HelpDeskDbContext _db;
 
-        public SettingsController(HelpDeskDbContext db)
+        public ProfileController(HelpDeskDbContext db)
         {
             _db = db;
         }
@@ -39,8 +39,30 @@ namespace HelpDesk.Presentation.Controllers
 
             return Ok(new { message = "Password updated successfully" });
 
+        }
 
+        [HttpGet]
+        public async Task<IActionResult> getUserInfo()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null) return Unauthorized();
+            var userId = Guid.Parse(userIdClaim);
 
+            var user = await _db.Users
+       .Include(u => u.Role)
+       .FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null) return Unauthorized();
+
+                var userInfo = new
+                {
+                    user.FullName,
+                    user.Email,
+                    user.CreatedAt,
+                    Role = user.Role.Name,       
+                };
+       
+            return Ok(userInfo);
+            
         }
     }
 }

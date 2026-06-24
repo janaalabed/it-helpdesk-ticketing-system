@@ -37,7 +37,7 @@ export const Links = [
     {
         label: "Knowledge Base",
         path: "/dashboard/KnowledgeBase",
-        allowedRoles: ["Admin"]
+        allowedRoles: ["Admin", "Manager", "IT Support Agent", "Employee"]
     },
          {
         label: "Profile",
