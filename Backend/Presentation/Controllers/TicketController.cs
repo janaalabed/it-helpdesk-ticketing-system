@@ -1,4 +1,5 @@
-﻿using HelpDesk.Data;
+﻿using HelpDesk.Core.DTOs;
+using HelpDesk.Data;
 using HelpDesk.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -90,6 +91,58 @@ namespace HelpDesk.Presentation.Controllers
             await _db.SaveChangesAsync();
 
             return Ok(new { message = "Ticket closed successfully" });
+        }
+
+
+    [HttpPost]
+    [Authorize(Roles = "Employee,Admin,Manager")]
+    public async Task<IActionResult> CreateTicket([FromBody] CreateTicketDto dto)
+    {
+       
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userIdClaim == null) return Unauthorized();
+
+        var userId = Guid.Parse(userIdClaim);
+
+       
+        var timestamp = DateTime.UtcNow.ToString("yyyyMMdd");
+        var randomSuffix = new Random().Next(1000, 9999);
+        var referenceNo = $"TKT-{timestamp}-{randomSuffix}";
+
+        
+        var newTicket = new Ticket
+        {
+            Id = Guid.NewGuid(),
+            ReferenceNo = referenceNo,
+            Title = dto.Title,
+            Description = dto.Description,
+            CategoryId = dto.CategoryId,
+            PriorityId = dto.PriorityId,
+            StatusId = 1, 
+            SubmittedBy = userId,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
+
+        _db.Tickets.Add(newTicket);
+        await _db.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(getTickets), new { id = newTicket.Id }, new { message = "Ticket successfully filed", referenceNo });
+    }
+
+    [HttpDelete("{id}")]
+        [Authorize(Roles = "Employee,Admin,Manager")]
+        public async Task<IActionResult> DeleteTicket(Guid id)
+        {
+            var ticket = await _db.Tickets.FindAsync(id);
+
+            if (ticket == null)
+                return NotFound();
+
+            _db.Tickets.Remove(ticket);
+            await _db.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
