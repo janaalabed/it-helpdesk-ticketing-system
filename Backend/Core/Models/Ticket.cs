@@ -11,7 +11,7 @@ public class Ticket
     public Guid SubmittedBy { get; set; }
     [ForeignKey("SubmittedBy")]
     [InverseProperty("TicketsSubmitted")]
-    public User SubmittedByUser { get; set; } = null!;
+    public User? SubmittedByUser { get; set; } = null!;
 
     public Guid? AssignedTo { get; set; }
     [ForeignKey("AssignedTo")]
@@ -20,15 +20,15 @@ public class Ticket
 
     public int CategoryId { get; set; }
     [ForeignKey("CategoryId")]
-    public Category Category { get; set; } = null!;
+    public Category? Category { get; set; } = null!;
 
     public int PriorityId { get; set; }
     [ForeignKey("PriorityId")]
-    public Priority Priority { get; set; } = null!;
+    public Priority? Priority { get; set; } = null!;
 
     public int StatusId { get; set; }
     [ForeignKey("StatusId")]
-    public Status Status { get; set; } = null!;
+    public Status? Status { get; set; } = null!;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;

@@ -36,7 +36,13 @@ namespace HelpDesk.Controllers
             var myEmail = user.Email;
             var tokenString = _jwtGenerator.GenerateToken(user, rolename);
 
-            return Ok(new { token = tokenString, email = myEmail, role = rolename });
+            return Ok(new
+            {
+                token = tokenString,
+                email = myEmail,
+                role = rolename,
+                id = user.Id
+            });
 
         }
     
