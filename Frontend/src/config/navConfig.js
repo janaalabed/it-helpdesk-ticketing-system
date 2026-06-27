@@ -7,7 +7,7 @@ export const Links = [
     {
         label: "New Ticket",
         path: "/dashboard/NewTicket",
-        allowedRoles: ["Admin", "Manager", "IT Support Agent", "Employee"]
+        allowedRoles: ["Admin", "Manager", "Employee"]
     },
     {
         label: "Tickets",

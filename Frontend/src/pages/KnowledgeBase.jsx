@@ -78,7 +78,6 @@ export function KnowledgeBase() {
     }
   };
 
-
   if (loading) {
     return (
       <div className="flex h-64 items-center justify-center bg-[#F8FAFC]">
@@ -89,7 +88,6 @@ export function KnowledgeBase() {
       </div>
     );
   }
-
 
   if (error) {
     return (
@@ -102,18 +100,14 @@ export function KnowledgeBase() {
   }
 
   return (
-
     <div className="min-h-screen bg-[#F8FAFC] px-4 py-[14px] font-sans antialiased">
-      {/* Form Context wrapper for high-level user permissions */}
       {canCreateArticle && (
         <div className="mx-auto mb-6 max-w-4xl">
           <CreateArticleForm onArticleCreated={fetchArticles} />
         </div>
       )}
 
-      {/* Main Documentation panel layout */}
       <div className="mx-auto max-w-4xl space-y-6">
-        {/* Header Block matching explicit Typography tokens */}
         <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-4">
           <h1 className="text-[20px] font-medium text-[#1E2A38]">
             Knowledge Base Documentation
@@ -124,7 +118,6 @@ export function KnowledgeBase() {
           </span>
         </div>
 
-        {/* Content Card grid block layout */}
         <div className="grid gap-4">
           {articles.map((article) => (
             <article
@@ -132,7 +125,6 @@ export function KnowledgeBase() {
               className="rounded-lg border-[0.5px] border-[#E2E8F0] bg-white p-6 shadow-sm transition-shadow duration-200 hover:shadow-md"
             >
               <div className="mb-3 flex items-start justify-between">
-                {/* Title mapping directly to Cyan-500 standard UI accent */}
                 <h2
                   onClick={() => handleArticleClick(article)}
                   className="cursor-pointer text-[14px] font-medium text-[#06B6D4] hover:text-[#22D3EE] hover:underline"
@@ -146,13 +138,12 @@ export function KnowledgeBase() {
                 </span>
               </div>
 
-              {/* Body documentation layout summary formatting */}
               <p className="line-clamp-2 mb-4 whitespace-pre-wrap text-[13px] leading-relaxed text-[#2D3E52]">
                 {article.content}
               </p>
 
-              {/* Bottom operational metadata tracking summary */}
               <div className="flex items-center space-x-4 border-t border-[#F1F5F9] pt-3 text-[11px] text-[#475569]">
+                {/* View Count */}
                 <div className="flex items-center space-x-1">
                   <svg
                     className="h-3.5 w-3.5 text-[#94A3B8]"
@@ -174,9 +165,36 @@ export function KnowledgeBase() {
                   </svg>
                   <span>{article.viewCount || 0} views</span>
                 </div>
-                {article.categoryId && (
+
+                {/* Author */}
+                {article.author && (
+                  <div className="flex items-center space-x-1">
+                    <svg
+                      className="h-3.5 w-3.5 text-[#94A3B8]"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                      />
+                    </svg>
+                    <span>{article.author}</span>
+                  </div>
+                )}
+
+                {/* Category */}
+                {article.category && (
                   <span className="rounded bg-[#F1F5F9] px-2 py-0.5 font-medium text-[#2D3E52]">
-                    Category ID: {article.categoryId}
+                    {article.category}
                   </span>
                 )}
               </div>
@@ -185,15 +203,30 @@ export function KnowledgeBase() {
         </div>
       </div>
 
-      {/* Modal Overlay matching precise 12px modal edge rule requirements */}
+      {/* Article Modal */}
       {selectedArticle && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 animate-fade-in">
           <div className="flex max-h-[85vh] w-full max-w-3xl flex-col rounded-[12px] border-[0.5px] border-[#E2E8F0] bg-white shadow-xl">
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-[#E2E8F0] p-6">
-              <h3 className="text-[14px] font-medium text-[#1E2A38]">
-                {selectedArticle.title}
-              </h3>
+              <div>
+                <h3 className="text-[14px] font-medium text-[#1E2A38]">
+                  {selectedArticle.title}
+                </h3>
+                <div className="mt-1 flex items-center space-x-3 text-[11px] text-[#94A3B8]">
+                  {selectedArticle.author && (
+                    <span>By {selectedArticle.author}</span>
+                  )}
+                  {selectedArticle.category && (
+                    <>
+                      <span>·</span>
+                      <span className="rounded bg-[#F1F5F9] px-2 py-0.5 font-medium text-[#2D3E52]">
+                        {selectedArticle.category}
+                      </span>
+                    </>
+                  )}
+                </div>
+              </div>
               <button
                 onClick={() => setSelectedArticle(null)}
                 className="text-[#94A3B8] hover:text-[#475569] text-lg font-bold p-1 focus:outline-none"
@@ -202,12 +235,12 @@ export function KnowledgeBase() {
               </button>
             </div>
 
-            {/* Modal Content container layout */}
+            {/* Modal Content */}
             <div className="overflow-y-auto p-6 text-[13px] leading-relaxed text-[#2D3E52] whitespace-pre-wrap">
               {selectedArticle.content}
             </div>
 
-            {/* Modal Control Action panel footer */}
+            {/* Modal Footer */}
             <div className="flex justify-end bg-[#F8FAFC] p-4 border-t border-[#E2E8F0] rounded-b-[12px]">
               <button
                 onClick={() => setSelectedArticle(null)}

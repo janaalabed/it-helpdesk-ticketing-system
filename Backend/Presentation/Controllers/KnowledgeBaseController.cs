@@ -50,7 +50,17 @@ namespace HelpDesk.Presentation.Controllers
         [Authorize]
         public async Task<IActionResult> getArticles()
         {
-            var articles = await _db.KnowledgeBaseArticles.ToListAsync();
+            var articles = await _db.KnowledgeBaseArticles.Select(a => new
+            {
+                a.Id,
+                a.Title,
+                a.Content,
+                a.ViewCount,
+                a.CreatedAt,
+                a.UpdatedAt,
+                Category = a.Category.Name,
+                author = a.user.FullName,
+            }).ToListAsync();
 
             if(articles == null)
             {

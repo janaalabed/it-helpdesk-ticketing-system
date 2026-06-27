@@ -37,7 +37,7 @@ namespace HelpDesk.Presentation.Controllers
                 RecentTickets = _db.Tickets
                 .Where(t => t.SubmittedByUser.Id == userId)
                 .OrderByDescending(t => t.CreatedAt)
-                .Take(5)
+                .Take(10)
                 .Select(t => new
                 {
                     t.Id,

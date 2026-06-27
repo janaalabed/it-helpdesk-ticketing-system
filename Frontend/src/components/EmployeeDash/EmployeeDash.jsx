@@ -68,6 +68,31 @@ export function EmployeeDashboard() {
     }
   }
 
+  async function handleDelete(id) {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this ticket?",
+    );
+    if (!confirmed) return;
+
+    try {
+      const response = await fetch(`https://localhost:7010/api/ticket/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        // Refresh stats to reflect the deletion
+        await getStats();
+      } else {
+        console.error("Failed to delete ticket:", response.status);
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+    }
+  }
+
   if (!stats)
     return <p className="text-[13px] text-[#94A3B8] p-[16px]">Loading...</p>;
 
@@ -140,8 +165,8 @@ export function EmployeeDashboard() {
           </h2>
           <div className="bg-white rounded-[8px] border border-[#E2E8F0] overflow-hidden">
             {/* Table Header */}
-            <div className="grid grid-cols-[1fr_2fr_1fr_1fr_1fr] gap-[12px] px-[16px] py-[10px] border-b border-[#E2E8F0] bg-[#F8FAFC]">
-              {["Reference", "Title", "Category", "Priority", "Status"].map(
+            <div className="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_auto] gap-[12px] px-[16px] py-[10px] border-b border-[#E2E8F0] bg-[#F8FAFC]">
+              {["Reference", "Title", "Category", "Priority", "Status", ""].map(
                 (col) => (
                   <span
                     key={col}
@@ -157,7 +182,7 @@ export function EmployeeDashboard() {
             {stats.recentTickets.map((ticket, index) => (
               <div
                 key={ticket.id}
-                className={`grid grid-cols-[1fr_2fr_1fr_1fr_1fr] gap-[12px] px-[16px] py-[12px] ${
+                className={`grid grid-cols-[1fr_2fr_1fr_1fr_1fr_auto] gap-[12px] px-[16px] py-[12px] ${
                   index !== stats.recentTickets.length - 1
                     ? "border-b border-[#F1F5F9]"
                     : ""
@@ -185,6 +210,29 @@ export function EmployeeDashboard() {
                   >
                     {ticket.status}
                   </span>
+                </div>
+                <div className="self-center">
+                  <button
+                    onClick={() => handleDelete(ticket.id)}
+                    className="text-[#94A3B8] hover:text-[#DC2626] transition-colors duration-150"
+                    title="Delete ticket"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-[15px] h-[15px]"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="3 6 5 6 21 6" />
+                      <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+                      <path d="M10 11v6M14 11v6" />
+                      <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+                    </svg>
+                  </button>
                 </div>
               </div>
             ))}
