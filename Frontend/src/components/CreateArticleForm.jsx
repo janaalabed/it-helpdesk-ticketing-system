@@ -70,71 +70,94 @@ export function CreateArticleForm({ onArticleCreated }) {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md space-y-4 mb-8"
-    >
-      <h2 className="text-xl font-bold text-gray-800">
-        Create Knowledge Base Article
-      </h2>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Article Title
-        </label>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
-          placeholder="e.g., How to connect to Corporate Wi-Fi"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Category
-        </label>
-        <select
-          value={categoryId}
-          onChange={(e) => setCategoryId(e.target.value)}
-          required
-          disabled={fetchingCategories}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border disabled:bg-gray-100"
-        >
-          <option value="">
-            {fetchingCategories ? "Loading categories..." : "Select a category"}
-          </option>
-          {categories.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Resolution Steps / Detailed Content
-        </label>
-        <textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          required
-          rows={4}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
-          placeholder="Provide explicit troubleshooting instructions..."
-        />
-      </div>
-
-      <button
-        type="submit"
-        disabled={submitting || fetchingCategories}
-        className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400 transition font-medium"
+    <div className="bg-slate-50 p-4">
+      <form
+        onSubmit={handleSubmit}
+        className="mx-auto max-w-3xl rounded-lg border border-slate-200 bg-white p-6 shadow-sm"
       >
-        {submitting ? "Saving..." : "Submit Article"}
-      </button>
-    </form>
+        {/* Header */}
+        <div className="mb-6 border-b border-slate-200 pb-4">
+          <h2 className="text-[20px] font-medium text-[#1E2A38]">
+            Create Knowledge Base Article
+          </h2>
+          <p className="mt-1 text-[13px] text-slate-500">
+            Create a reusable article to help resolve recurring support
+            requests.
+          </p>
+        </div>
+
+        <div className="space-y-5">
+          {/* Title */}
+          <div>
+            <label className="mb-1 block text-[11px] font-medium uppercase tracking-wide text-slate-500">
+              Article Title
+            </label>
+
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+              placeholder="e.g. How to connect to Corporate Wi-Fi"
+              className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-[13px] text-slate-700 placeholder:text-slate-400 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-100"
+            />
+          </div>
+
+          {/* Category */}
+          <div>
+            <label className="mb-1 block text-[11px] font-medium uppercase tracking-wide text-slate-500">
+              Category
+            </label>
+
+            <select
+              value={categoryId}
+              onChange={(e) => setCategoryId(e.target.value)}
+              required
+              disabled={fetchingCategories}
+              className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-[13px] text-slate-700 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-100 disabled:cursor-not-allowed disabled:bg-slate-100"
+            >
+              <option value="">
+                {fetchingCategories
+                  ? "Loading categories..."
+                  : "Select a category"}
+              </option>
+
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Content */}
+          <div>
+            <label className="mb-1 block text-[11px] font-medium uppercase tracking-wide text-slate-500">
+              Resolution Steps
+            </label>
+
+            <textarea
+              rows={7}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              required
+              placeholder="Provide detailed troubleshooting instructions..."
+              className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-[13px] text-slate-700 placeholder:text-slate-400 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-100"
+            />
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="mt-8 flex justify-end border-t border-slate-200 pt-5">
+          <button
+            type="submit"
+            disabled={submitting || fetchingCategories}
+            className="rounded-md bg-cyan-500 px-6 py-2 text-[13px] font-medium text-white transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:bg-slate-300"
+          >
+            {submitting ? "Saving..." : "Submit Article"}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }

@@ -162,7 +162,7 @@ export function AdminDashboard() {
         <div className="flex items-center gap-[10px] bg-[#FEF3C7] border border-[#D97706]/20 rounded-[8px] px-[16px] py-[12px]">
           <span className="text-[13px] font-medium text-[#D97706]">
             ⚠ {stats.unassignedTickets} unassigned{" "}
-            {stats.unassignedTickets === 1 ? "ticket" : "tickets"} — assign an
+            {stats.unassignedTickets === 1 ? "ticket" : "tickets"} - assign an
             agent.
           </span>
         </div>

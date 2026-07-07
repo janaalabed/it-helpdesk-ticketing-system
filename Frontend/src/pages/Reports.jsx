@@ -1,12 +1,22 @@
 import { useEffect, useState } from "react";
 import jsPDF from "jspdf";
 
+const token = localStorage.getItem("token");
+
 export function Reports() {
   const [summary, setSummary] = useState(null);
 
   useEffect(() => {
     async function loadSummary() {
-      const response = await fetch("https://localhost:7010/api/Reports/summary");
+      const response = await fetch(
+        "https://localhost:7010/api/Reports/summary",
+        {
+          method: "Get",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
       const data = await response.json();
       setSummary(data);
     }
@@ -37,8 +47,11 @@ export function Reports() {
     0,
     Math.min(
       100,
-      100 - openRate - Math.round(highPriorityRate / 2) + Math.round(resolutionRate / 2)
-    )
+      100 -
+        openRate -
+        Math.round(highPriorityRate / 2) +
+        Math.round(resolutionRate / 2),
+    ),
   );
 
   function exportPdf() {
@@ -56,7 +69,11 @@ export function Reports() {
 
     doc.text("Manager Insights:", 20, 100);
     doc.text(`- ${openRate}% of tickets are still open.`, 25, 110);
-    doc.text(`- ${highPriorityRate}% of tickets require urgent attention.`, 25, 120);
+    doc.text(
+      `- ${highPriorityRate}% of tickets require urgent attention.`,
+      25,
+      120,
+    );
     doc.text(`- ${resolutionRate}% of tickets have been resolved.`, 25, 130);
 
     doc.save("helpdesk-report.pdf");
@@ -73,7 +90,8 @@ export function Reports() {
             Support Performance Overview
           </h1>
           <p className="mt-1 text-sm text-slate-500">
-            A manager-facing report view for workload, urgency, exports, and AI-assisted categorization.
+            A manager-facing report view for workload, urgency, exports, and
+            AI-assisted categorization.
           </p>
         </div>
 
@@ -91,45 +109,77 @@ export function Reports() {
           <p className="text-sm text-slate-500">Support Health Score</p>
 
           <div className="mt-4 flex items-end gap-2">
-            <span className="text-6xl font-bold text-cyan-600">{healthScore}</span>
-            <span className="mb-2 text-lg font-semibold text-slate-400">/100</span>
+            <span className="text-6xl font-bold text-cyan-600">
+              {healthScore}
+            </span>
+            <span className="mb-2 text-lg font-semibold text-slate-400">
+              /100
+            </span>
           </div>
 
           <p className="mt-4 text-sm text-slate-600">
-            Calculated from open workload, high-priority pressure, and resolution progress.
+            Calculated from open workload, high-priority pressure, and
+            resolution progress.
           </p>
         </div>
 
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-2">
-          <h2 className="text-sm font-semibold text-slate-800">Manager Insights</h2>
+          <h2 className="text-sm font-semibold text-slate-800">
+            Manager Insights
+          </h2>
           <p className="mt-1 text-xs text-slate-500">
             Simple interpretation of the current ticket report.
           </p>
 
           <div className="mt-5 grid gap-3 md:grid-cols-3">
-            <Insight title="Open Workload" text={`${openRate}% of tickets are still open.`} />
-            <Insight title="Urgency Level" text={`${highPriorityRate}% are high priority.`} />
-            <Insight title="Resolution Rate" text={`${resolutionRate}% of tickets are resolved.`} />
+            <Insight
+              title="Open Workload"
+              text={`${openRate}% of tickets are still open.`}
+            />
+            <Insight
+              title="Urgency Level"
+              text={`${highPriorityRate}% are high priority.`}
+            />
+            <Insight
+              title="Resolution Rate"
+              text={`${resolutionRate}% of tickets are resolved.`}
+            />
           </div>
         </div>
       </div>
 
       <div className="mt-5 grid gap-5 lg:grid-cols-2">
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="text-sm font-semibold text-slate-800">AI Categorization Preview</h2>
+          <h2 className="text-sm font-semibold text-slate-800">
+            AI Categorization Preview
+          </h2>
           <p className="mt-1 text-xs text-slate-500">
             Suggested AI categories based on current support patterns.
           </p>
 
           <div className="mt-5 space-y-3">
-            <AiCategory label="Hardware" confidence="High" reason="Many tickets mention laptops, printers, or physical devices." />
-            <AiCategory label="Network" confidence="Medium" reason="Some tickets may involve VPN, Wi-Fi, or connectivity issues." />
-            <AiCategory label="Access & Login" confidence="Medium" reason="Useful for password, account, and authentication-related requests." />
+            <AiCategory
+              label="Hardware"
+              confidence="High"
+              reason="Many tickets mention laptops, printers, or physical devices."
+            />
+            <AiCategory
+              label="Network"
+              confidence="Medium"
+              reason="Some tickets may involve VPN, Wi-Fi, or connectivity issues."
+            />
+            <AiCategory
+              label="Access & Login"
+              confidence="Medium"
+              reason="Useful for password, account, and authentication-related requests."
+            />
           </div>
         </div>
 
         <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-6">
-          <h2 className="text-sm font-semibold text-slate-800">Export & AI Features</h2>
+          <h2 className="text-sm font-semibold text-slate-800">
+            Export & AI Features
+          </h2>
           <p className="mt-1 text-xs text-slate-500">
             Current and upcoming report capabilities.
           </p>

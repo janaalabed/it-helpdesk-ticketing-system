@@ -1,6 +1,7 @@
 ﻿using HelpDesk.Data;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HelpDesk.Presentation.Controllers
 {
@@ -15,6 +16,7 @@ namespace HelpDesk.Presentation.Controllers
             _context = context;
         }
         [HttpGet("summary")]
+        [Authorize(Roles="Manager, Admin")]
         public IActionResult GetSummary()
         {
             var totalTickets = _context.Tickets.Count();
