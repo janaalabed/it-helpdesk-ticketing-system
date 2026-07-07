@@ -6,9 +6,11 @@ export function NewTicket() {
     description: "",
     categoryId: "",
     priorityId: "",
+    assignedTo: "",
   });
   const [categories, setCategories] = useState([]);
   const [priorities, setPriorities] = useState([]);
+  const [assignableUsers, setAssignableUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
 
@@ -22,8 +24,10 @@ export function NewTicket() {
     fetch("https://localhost:7010/api/lookups/priorities", { headers })
       .then((res) => res.json())
       .then(setPriorities);
+    fetch("https://localhost:7010/api/lookups/assignable-users", { headers })
+      .then((res) => res.json())
+      .then(setAssignableUsers);
   }, []);
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -45,6 +49,7 @@ export function NewTicket() {
           description: formData.description,
           categoryId: parseInt(formData.categoryId),
           priorityId: parseInt(formData.priorityId),
+          assignedTo: formData.assignedTo || null,
         }),
       });
 
@@ -175,6 +180,29 @@ export function NewTicket() {
                 {priorities.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.level}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          {/* Input Group: Assigned To Dropdown */}
+          <div>
+            <label className="block text-[11px] font-medium text-[#475569] mb-1">
+              Assign To
+            </label>
+            <div className="relative">
+              <select
+                name="assignedTo"
+                value={formData.assignedTo}
+                onChange={handleChange}
+                className="w-full h-9 rounded-[6px] border-[0.5px] border-[#E2E8F0] px-3 text-[13px] text-[#2D3E52] bg-white appearance-none focus:border-[#06B6D4] focus:outline-none focus:ring-1 focus:ring-[#06B6D4]"
+              >
+                <option value="" className="text-[#94A3B8]">
+                  -- Unassigned --
+                </option>
+                {assignableUsers.map((u) => (
+                  <option key={u.id} value={u.id}>
+                    {u.fullName}
                   </option>
                 ))}
               </select>

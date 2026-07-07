@@ -1,6 +1,7 @@
 ﻿using HelpDesk.Data;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HelpDesk.Presentation.Controllers
 {
@@ -50,6 +51,21 @@ namespace HelpDesk.Presentation.Controllers
             return Ok(statuses);
 
 
+        }
+        [HttpGet("assignable-users")]
+        public async Task<IActionResult> getAssignableUsers()
+        {
+            var users = await _db.Users
+                .Where(u => u.Role.Name == "IT Support Agent" || u.Role.Name == "Manager")
+                .Select(u => new
+                {
+                    u.Id,
+                    u.FullName
+                })
+                .OrderBy(u => u.FullName)
+                .ToListAsync();
+
+            return Ok(users);
         }
     }
 }

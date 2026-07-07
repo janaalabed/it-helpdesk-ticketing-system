@@ -12,6 +12,20 @@ const formatDate = (dateStr) => {
 
 const token = localStorage.getItem("token");
 
+function getUserRole(token) {
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    // NOTE: adjust this key if your JWT uses a different claim name for role.
+    // Paste a real token into jwt.io to confirm the actual claim key.
+    return (
+      payload.role ||
+      payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
+    );
+  } catch {
+    return null;
+  }
+}
+
 const getStatusStyles = (status) => {
   switch (status?.toLowerCase()) {
     case "open":
@@ -55,6 +69,9 @@ function TicketModal({ ticket, onClose, onTicketClosed }) {
   );
 
   const isClosed = ticket.status?.toLowerCase() === "closed";
+  const userRole = getUserRole(token);
+  const isAgent = userRole === "IT Support Agent";
+  const isAlreadyEscalated = ticket.assignedToUser === "Hadi Hijazi";
 
   async function closeTicket() {
     try {
@@ -71,6 +88,33 @@ function TicketModal({ ticket, onClose, onTicketClosed }) {
 
       if (response.ok) {
         alert("Ticket closed successfully");
+        onClose();
+        onTicketClosed();
+      } else {
+        const error = await response.text();
+        alert(`Failed: ${error}`);
+      }
+    } catch (error) {
+      console.error("Network or parse error:", error);
+      alert("Server error");
+    }
+  }
+
+  async function escalateTicket() {
+    try {
+      const response = await fetch(
+        `https://localhost:7010/api/ticket/${ticket.id}/escalate`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response.ok) {
+        alert("Ticket escalated to Hadi Hijazi");
         onClose();
         onTicketClosed();
       } else {
@@ -171,7 +215,15 @@ function TicketModal({ ticket, onClose, onTicketClosed }) {
           </div>
 
           {/* footer actions */}
-          <div className="flex justify-end pt-[4px]">
+          <div className="flex justify-end gap-[8px] pt-[4px]">
+            {isAgent && !isClosed && !isAlreadyEscalated && (
+              <button
+                onClick={escalateTicket}
+                className="h-[34px] px-[14px] text-[12px] font-medium text-[#7C3AED] bg-[#F3E8FF] hover:bg-[#E9D5FF] rounded-[6px] border border-[#E9D5FF] transition-colors duration-150"
+              >
+                Escalate to Manager
+              </button>
+            )}
             {isClosed ? (
               // ticket already closed — show a disabled read-only badge
               <span className="h-[34px] px-[14px] text-[12px] font-medium text-[#94A3B8] bg-[#F1F5F9] rounded-[6px] border border-[#E2E8F0] flex items-center">
@@ -211,8 +263,8 @@ export function MyTickets() {
     if (selectedStatus) params.append("status", selectedStatus);
     const query = params.toString();
     return query
-      ? `https://localhost:7010/api/ticket?${query}`
-      : `https://localhost:7010/api/ticket`;
+      ? `https://localhost:7010/api/ticket/myTickets?${query}`
+      : `https://localhost:7010/api/ticket/myTickets`;
   };
 
   const getTickets = async () => {

@@ -51,14 +51,26 @@ namespace HelpDesk.Presentation.Controllers
 
         [HttpGet("myTickets")]
         [Authorize(Roles = "IT Support Agent,Manager")]
-        public async Task<IActionResult> getTicketById()
+        public async Task<IActionResult> getTicketById(
+           [FromQuery] string? category = null,
+           [FromQuery] string? status = null,
+           [FromQuery] string? priority = null)
         {
-
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null) return Unauthorized();
 
             var userId = Guid.Parse(userIdClaim);
-            var myTicket = _db.Tickets.Where(t => t.AssignedToUser.Id == userId)
+
+            var query = _db.Tickets.Where(t => t.AssignedToUser.Id == userId);
+
+            if (!string.IsNullOrEmpty(category))
+                query = query.Where(t => t.Category.Name == category);
+            if (!string.IsNullOrEmpty(status))
+                query = query.Where(t => t.Status.Label == status);
+            if (!string.IsNullOrEmpty(priority))
+                query = query.Where(t => t.Priority.Level == priority);
+
+            var myTickets = await query
                 .Select(t => new
                 {
                     t.Id,
@@ -70,11 +82,12 @@ namespace HelpDesk.Presentation.Controllers
                     status = t.Status.Label,
                     t.CreatedAt,
                     t.UpdatedAt,
-                    submittedByUser = t.SubmittedByUser.FullName
+                    submittedByUser = t.SubmittedByUser.FullName,
+                    assignedToUser = t.AssignedToUser.FullName
+                })
+                .ToListAsync();
 
-                }).ToList();
-
-            return Ok(myTicket);
+            return Ok(myTickets);
         }
 
         [HttpPatch("{id}/changeStatus")]
@@ -94,43 +107,65 @@ namespace HelpDesk.Presentation.Controllers
         }
 
 
-    [HttpPost]
-    [Authorize(Roles = "Employee,Admin,Manager")]
-    public async Task<IActionResult> CreateTicket([FromBody] CreateTicketDto dto)
-    {
-       
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (userIdClaim == null) return Unauthorized();
-
-        var userId = Guid.Parse(userIdClaim);
-
-       
-        var timestamp = DateTime.UtcNow.ToString("yyyyMMdd");
-        var randomSuffix = new Random().Next(1000, 9999);
-        var referenceNo = $"TKT-{timestamp}-{randomSuffix}";
-
-        
-        var newTicket = new Ticket
+        [HttpPost]
+        [Authorize(Roles = "Employee,Admin,Manager")]
+        public async Task<IActionResult> CreateTicket([FromBody] CreateTicketDto dto)
         {
-            Id = Guid.NewGuid(),
-            ReferenceNo = referenceNo,
-            Title = dto.Title,
-            Description = dto.Description,
-            CategoryId = dto.CategoryId,
-            PriorityId = dto.PriorityId,
-            StatusId = 1, 
-            SubmittedBy = userId,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null) return Unauthorized();
 
-        _db.Tickets.Add(newTicket);
-        await _db.SaveChangesAsync();
+            var userId = Guid.Parse(userIdClaim);
 
-        return CreatedAtAction(nameof(getTickets), new { id = newTicket.Id }, new { message = "Ticket successfully filed", referenceNo });
-    }
+           
+            if (dto.AssignedTo.HasValue)
+            {
+                var assignedUserExists = await _db.Users.AnyAsync(u => u.Id == dto.AssignedTo.Value);
+                if (!assignedUserExists)
+                    return BadRequest("Assigned user not found");
+            }
 
-    [HttpDelete("{id}")]
+            var timestamp = DateTime.UtcNow.ToString("yyyyMMdd");
+            var randomSuffix = new Random().Next(1000, 9999);
+            var referenceNo = $"TKT-{timestamp}-{randomSuffix}";
+
+            var newTicket = new Ticket
+            {
+                Id = Guid.NewGuid(),
+                ReferenceNo = referenceNo,
+                Title = dto.Title,
+                Description = dto.Description,
+                CategoryId = dto.CategoryId,
+                PriorityId = dto.PriorityId,
+                StatusId = 1,
+                SubmittedBy = userId,
+                AssignedTo = dto.AssignedTo,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            _db.Tickets.Add(newTicket);
+            await _db.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(getTickets), new { id = newTicket.Id }, new { message = "Ticket successfully filed", referenceNo });
+        }
+        [HttpPatch("{id}/escalate")]
+        [Authorize(Roles = "IT Support Agent")]
+        public async Task<IActionResult> EscalateTicket(Guid id)
+        {
+            var ticket = await _db.Tickets.FirstOrDefaultAsync(t => t.Id == id);
+            if (ticket == null) return NotFound("Ticket not found");
+
+            var manager = await _db.Users.FirstOrDefaultAsync(u => u.FullName == "Hadi Hijazi");
+            if (manager == null) return StatusCode(500, "Escalation manager not found");
+
+            ticket.AssignedTo = manager.Id;
+            ticket.UpdatedAt = DateTime.UtcNow;
+            await _db.SaveChangesAsync();
+
+            return Ok(new { message = "Ticket escalated to Hadi Hijazi" });
+        }
+
+        [HttpDelete("{id}")]
         [Authorize(Roles = "Employee,Admin,Manager")]
         public async Task<IActionResult> DeleteTicket(Guid id)
         {
