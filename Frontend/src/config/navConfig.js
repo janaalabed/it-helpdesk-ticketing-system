@@ -12,7 +12,7 @@ export const Links = [
     {
         label: "Tickets",
         path: "/dashboard/Tickets",
-        allowedRoles: ["Admin", "Manager", "Employee"]
+        allowedRoles: ["Admin", "Manager"]
     },  
     {
         label: "My Tickets",
@@ -22,7 +22,7 @@ export const Links = [
     {
         label: "Notifications",
         path: "/dashboard/Notifications",
-        allowedRoles: ["Admin", "Manager", "IT Support Agent", "Employee"]
+        allowedRoles: [ "Manager", "IT Support Agent", "Employee"]
     },
         {
         label: "Users",

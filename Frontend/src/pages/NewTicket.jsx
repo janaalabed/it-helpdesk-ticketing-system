@@ -1,5 +1,19 @@
 import { useState, useEffect } from "react";
 
+function getUserRole(token) {
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    // NOTE: adjust this key if your JWT uses a different claim name for role.
+    // Paste a real token into jwt.io to confirm the actual claim key.
+    return (
+      payload.role ||
+      payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
+    );
+  } catch {
+    return null;
+  }
+}
+
 export function NewTicket() {
   const [formData, setFormData] = useState({
     title: "",
@@ -14,8 +28,11 @@ export function NewTicket() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
 
+  const token = localStorage.getItem("token");
+  const userRole = getUserRole(token);
+  const canAssign = userRole === "Manager" || userRole === "Admin";
+
   useEffect(() => {
-    const token = localStorage.getItem("token");
     const headers = { Authorization: `Bearer ${token}` };
 
     fetch("https://localhost:7010/api/lookups/categories", { headers })
@@ -24,10 +41,15 @@ export function NewTicket() {
     fetch("https://localhost:7010/api/lookups/priorities", { headers })
       .then((res) => res.json())
       .then(setPriorities);
-    fetch("https://localhost:7010/api/lookups/assignable-users", { headers })
-      .then((res) => res.json())
-      .then(setAssignableUsers);
+
+    // only fetch assignable users if the role can actually use the dropdown
+    if (canAssign) {
+      fetch("https://localhost:7010/api/lookups/assignable-users", { headers })
+        .then((res) => res.json())
+        .then(setAssignableUsers);
+    }
   }, []);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -42,14 +64,15 @@ export function NewTicket() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           title: formData.title,
           description: formData.description,
           categoryId: parseInt(formData.categoryId),
           priorityId: parseInt(formData.priorityId),
-          assignedTo: formData.assignedTo || null,
+          // employees can't assign, so this stays null for them regardless of state
+          assignedTo: canAssign ? formData.assignedTo || null : null,
         }),
       });
 
@@ -64,6 +87,7 @@ export function NewTicket() {
           description: "",
           categoryId: "",
           priorityId: "",
+          assignedTo: "",
         });
       } else {
         setMessage({
@@ -82,16 +106,12 @@ export function NewTicket() {
   };
 
   return (
-    // Canvas Background (Slate-50) & Container Padding
     <div className="min-h-screen bg-[#F8FAFC] px-4 py-[14px] font-sans antialiased">
-      {/* Card Wrapper matching design constraints (8px/12px corners, 0.5px border) */}
       <div className="mx-auto max-w-[500px] rounded-lg border-[0.5px] border-[#E2E8F0] bg-white p-6 shadow-sm">
-        {/* Page Heading H1 (20px, Weight 500, Slate-900) */}
         <h1 className="mb-6 text-[20px] font-medium text-[#1E2A38]">
           Submit New Support Request
         </h1>
 
-        {/* Messaging Layout (Alert uses Cyan-50 context or fallback status colors) */}
         {message && (
           <div
             className={`mb-[15px] p-[10px] rounded-[6px] text-[13px] border-[0.5px] ${
@@ -105,7 +125,6 @@ export function NewTicket() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-[15px]">
-          {/* Input Group: Title */}
           <div>
             <label className="block text-[11px] font-medium text-[#475569] mb-1">
               Subject Summary Title *
@@ -121,7 +140,6 @@ export function NewTicket() {
             />
           </div>
 
-          {/* Input Group: Description */}
           <div>
             <label className="block text-[11px] font-medium text-[#475569] mb-1">
               Detailed Description
@@ -136,7 +154,6 @@ export function NewTicket() {
             />
           </div>
 
-          {/* Input Group: Category Dropdown */}
           <div>
             <label className="block text-[11px] font-medium text-[#475569] mb-1">
               System Category *
@@ -161,7 +178,6 @@ export function NewTicket() {
             </div>
           </div>
 
-          {/* Input Group: Priority Dropdown */}
           <div className="pb-1">
             <label className="block text-[11px] font-medium text-[#475569] mb-1">
               Priority Classification Urgency *
@@ -185,31 +201,33 @@ export function NewTicket() {
               </select>
             </div>
           </div>
-          {/* Input Group: Assigned To Dropdown */}
-          <div>
-            <label className="block text-[11px] font-medium text-[#475569] mb-1">
-              Assign To
-            </label>
-            <div className="relative">
-              <select
-                name="assignedTo"
-                value={formData.assignedTo}
-                onChange={handleChange}
-                className="w-full h-9 rounded-[6px] border-[0.5px] border-[#E2E8F0] px-3 text-[13px] text-[#2D3E52] bg-white appearance-none focus:border-[#06B6D4] focus:outline-none focus:ring-1 focus:ring-[#06B6D4]"
-              >
-                <option value="" className="text-[#94A3B8]">
-                  -- Unassigned --
-                </option>
-                {assignableUsers.map((u) => (
-                  <option key={u.id} value={u.id}>
-                    {u.fullName}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
 
-          {/* Primary Action Button (Cyan-500, Cyan-400 hover state, 6px radius) */}
+          {/* Assign To dropdown — Manager/Admin only */}
+          {canAssign && (
+            <div>
+              <label className="block text-[11px] font-medium text-[#475569] mb-1">
+                Assign To
+              </label>
+              <div className="relative">
+                <select
+                  name="assignedTo"
+                  value={formData.assignedTo}
+                  onChange={handleChange}
+                  className="w-full h-9 rounded-[6px] border-[0.5px] border-[#E2E8F0] px-3 text-[13px] text-[#2D3E52] bg-white appearance-none focus:border-[#06B6D4] focus:outline-none focus:ring-1 focus:ring-[#06B6D4]"
+                >
+                  <option value="" className="text-[#94A3B8]">
+                    -- Unassigned --
+                  </option>
+                  {assignableUsers.map((u) => (
+                    <option key={u.id} value={u.id}>
+                      {u.fullName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          )}
+
           <button
             type="submit"
             disabled={loading}

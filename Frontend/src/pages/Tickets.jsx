@@ -55,20 +55,16 @@ function TicketModal({ ticket, onClose }) {
   );
 
   return (
-    // backdrop
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-[#1E2A38]/40 px-[16px]"
       onClick={onClose}
     >
-      {/* modal panel */}
       <div
         className="relative w-full max-w-lg bg-white rounded-[12px] border border-[#E2E8F0] shadow-lg overflow-hidden"
-        onClick={(e) => e.stopPropagation()} // prevent backdrop close on inner click
+        onClick={(e) => e.stopPropagation()}
       >
-        {/* cyan accent top bar for high priority */}
         {isHighPriority && <div className="h-[3px] w-full bg-[#06B6D4]" />}
 
-        {/* header */}
         <div className="flex items-start justify-between gap-3 px-[20px] pt-[20px] pb-[14px] border-b border-[#E2E8F0]">
           <div className="min-w-0">
             <span className="text-[11px] font-mono text-[#94A3B8] block mb-[4px]">
@@ -86,9 +82,7 @@ function TicketModal({ ticket, onClose }) {
           </button>
         </div>
 
-        {/* body */}
         <div className="px-[20px] py-[16px] space-y-[16px]">
-          {/* badges row */}
           <div className="flex flex-wrap gap-[6px]">
             <span
               className={`text-[11px] px-[8px] py-[3px] rounded-full font-medium uppercase tracking-wider ${getStatusStyles(ticket.status)}`}
@@ -105,7 +99,6 @@ function TicketModal({ ticket, onClose }) {
             </span>
           </div>
 
-          {/* description */}
           <div>
             <p className="text-[11px] font-medium text-[#94A3B8] uppercase tracking-wider mb-[6px]">
               Description
@@ -115,7 +108,6 @@ function TicketModal({ ticket, onClose }) {
             </p>
           </div>
 
-          {/* people */}
           <div className="grid grid-cols-2 gap-[12px]">
             <div className="bg-[#F8FAFC] rounded-[6px] p-[10px]">
               <p className="text-[10px] text-[#94A3B8] uppercase tracking-wider mb-[2px]">
@@ -135,7 +127,6 @@ function TicketModal({ ticket, onClose }) {
             </div>
           </div>
 
-          {/* timestamps */}
           <div className="flex justify-between text-[11px] text-[#94A3B8] pt-[4px] border-t border-[#F1F5F9]">
             <span>Created: {formatDate(ticket.createdAt)}</span>
             {ticket.updatedAt && (
@@ -154,11 +145,20 @@ export function Tickets() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedPriority, setSelectedPriority] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
-  const [selectedTicket, setSelectedTicket] = useState(null); // ← modal state
+  const [selectedTicket, setSelectedTicket] = useState(null);
+  const [assignableUsers, setAssignableUsers] = useState([]);
 
   useEffect(() => {
     getTickets();
   }, [selectedCategory, selectedPriority, selectedStatus]);
+
+  useEffect(() => {
+    fetch("https://localhost:7010/api/lookups/assignable-users", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then(setAssignableUsers);
+  }, []);
 
   const buildUrl = () => {
     const params = new URLSearchParams();
@@ -187,15 +187,40 @@ export function Tickets() {
     }
   };
 
+  const assignTicket = async (ticketId, assignedTo) => {
+    if (!assignedTo) return;
+    try {
+      const response = await fetch(
+        `https://localhost:7010/api/ticket/${ticketId}/assign`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ assignedTo }),
+        },
+      );
+
+      if (response.ok) {
+        getTickets();
+      } else {
+        const error = await response.text();
+        alert(`Failed to assign: ${error}`);
+      }
+    } catch (error) {
+      console.error("Network or parse error:", error);
+      alert("Server error");
+    }
+  };
+
   return (
     <>
-      {/* Modal */}
       <TicketModal
         ticket={selectedTicket}
         onClose={() => setSelectedTicket(null)}
       />
 
-      {/* Filters */}
       <div className="mb-[16px]">
         <Filters
           selectedCategory={selectedCategory}
@@ -207,17 +232,16 @@ export function Tickets() {
         />
       </div>
 
-      {/* Ticket count */}
       <p className="text-[11px] text-[#94A3B8] mb-[10px]">
         {tickets.length} {tickets.length === 1 ? "ticket" : "tickets"}
       </p>
 
-      {/* Ticket rows */}
       <div className="flex flex-col gap-[6px]">
         {tickets.map((ticket) => {
           const isHighPriority = ["high", "urgent", "critical"].includes(
             ticket.priority?.toLowerCase(),
           );
+          const isUnassigned = !ticket.assignedToUser;
 
           return (
             <div
@@ -226,7 +250,6 @@ export function Tickets() {
               className={`flex items-center justify-between gap-3 bg-white border border-[#E2E8F0] rounded-[5px] px-[16px] py-[12px] cursor-pointer hover:border-[#06B6D4] hover:shadow-sm transition-all duration-150
                 ${isHighPriority ? "border-l-[3px] border-l-[#06B6D4]" : ""}`}
             >
-              {/* left: ref + title */}
               <div className="flex items-center gap-[12px] min-w-0">
                 <span className="text-[11px] font-mono text-[#94A3B8] flex-shrink-0 hidden sm:block">
                   {ticket.referenceNo || `#${ticket.id}`}
@@ -236,7 +259,6 @@ export function Tickets() {
                 </p>
               </div>
 
-              {/* right: badges + date */}
               <div className="flex items-center gap-[8px] flex-shrink-0">
                 <span
                   className={`hidden sm:inline-flex text-[11px] px-[8px] py-[2px] rounded-full font-medium uppercase tracking-wider ${getPriorityStyles(ticket.priority)}`}
@@ -251,6 +273,24 @@ export function Tickets() {
                 <span className="hidden md:block text-[11px] text-[#94A3B8]">
                   {formatDate(ticket.createdAt)}
                 </span>
+
+                {isUnassigned && (
+                  <select
+                    defaultValue=""
+                    onClick={(e) => e.stopPropagation()}
+                    onChange={(e) => assignTicket(ticket.id, e.target.value)}
+                    className="text-[11px] h-[26px] rounded-[6px] border border-[#E2E8F0] px-[6px] bg-white text-[#475569] focus:outline-none focus:ring-1 focus:ring-[#06B6D4]"
+                  >
+                    <option value="" disabled>
+                      Assign to...
+                    </option>
+                    {assignableUsers.map((u) => (
+                      <option key={u.id} value={u.id}>
+                        {u.fullName}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
             </div>
           );
