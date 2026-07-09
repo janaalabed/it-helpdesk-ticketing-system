@@ -5,7 +5,14 @@ export function ItSupportDashboard() {
 
   useEffect(() => {
     async function loadDashboard() {
-      const response = await fetch("https://localhost:7010/api/ItSupportDashboard");
+      const response = await fetch(
+        "https://localhost:7010/api/ItSupportDashboard",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
       const data = await response.json();
       setDashboard(data);
     }
@@ -14,7 +21,9 @@ export function ItSupportDashboard() {
   }, []);
 
   if (!dashboard) {
-    return <p className="p-6 text-slate-500">Loading IT support dashboard...</p>;
+    return (
+      <p className="p-6 text-slate-500">Loading IT support dashboard...</p>
+    );
   }
 
   const priorities = [
@@ -33,7 +42,7 @@ export function ItSupportDashboard() {
           IT Support Dashboard
         </p>
         <h1 className="mt-1 text-2xl font-semibold text-slate-900">
-          Welcome back, Ali 👋
+          Welcome back, Ali 
         </h1>
         <p className="mt-1 text-sm text-slate-500">
           Here is your assigned ticket workload and priority overview.
@@ -54,11 +63,13 @@ export function ItSupportDashboard() {
           Breakdown of your tickets by priority level.
         </p>
 
-            <div className="mt-5 space-y-4">
+        <div className="mt-5 space-y-4">
           {priorities.map((priority) => (
             <div key={priority.label}>
               <div className="mb-1 flex justify-between text-sm">
-                <span className="font-medium text-slate-700">{priority.label}</span>
+                <span className="font-medium text-slate-700">
+                  {priority.label}
+                </span>
                 <span className="text-slate-500">{priority.value}</span>
               </div>
 
@@ -86,21 +97,24 @@ export function ItSupportDashboard() {
           <div className="rounded-lg bg-slate-50 p-4">
             <p className="font-medium text-slate-800">🚨 Critical Tickets</p>
             <p className="mt-1 text-sm text-slate-600">
-              You currently have <strong>{dashboard.critical}</strong> critical ticket(s) requiring immediate attention.
+              You currently have <strong>{dashboard.critical}</strong> critical
+              ticket(s) requiring immediate attention.
             </p>
           </div>
 
           <div className="rounded-lg bg-slate-50 p-4">
             <p className="font-medium text-slate-800">⚡ Active Workload</p>
             <p className="mt-1 text-sm text-slate-600">
-              <strong>{dashboard.working}</strong> ticket(s) are currently in progress.
+              <strong>{dashboard.working}</strong> ticket(s) are currently in
+              progress.
             </p>
           </div>
 
           <div className="rounded-lg bg-slate-50 p-4">
             <p className="font-medium text-slate-800">📋 Assigned Queue</p>
             <p className="mt-1 text-sm text-slate-600">
-              You have <strong>{dashboard.assigned}</strong> assigned ticket(s). Prioritize critical and high-priority requests first.
+              You have <strong>{dashboard.assigned}</strong> assigned ticket(s).
+              Prioritize critical and high-priority requests first.
             </p>
           </div>
         </div>

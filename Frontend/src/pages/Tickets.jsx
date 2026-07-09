@@ -221,7 +221,7 @@ export function Tickets() {
         onClose={() => setSelectedTicket(null)}
       />
 
-      <div className="mb-[16px]">
+      <div className="mb-[20px]">
         <Filters
           selectedCategory={selectedCategory}
           selectedPriority={selectedPriority}
@@ -232,54 +232,72 @@ export function Tickets() {
         />
       </div>
 
-      <p className="text-[11px] text-[#94A3B8] mb-[10px]">
+      <p className="text-[12px] text-[#94A3B8] mb-[12px] font-medium">
         {tickets.length} {tickets.length === 1 ? "ticket" : "tickets"}
       </p>
 
-      <div className="flex flex-col gap-[6px]">
+      <div className="flex flex-col gap-[10px]">
         {tickets.map((ticket) => {
-          const isHighPriority = ["high", "urgent", "critical"].includes(
-            ticket.priority?.toLowerCase(),
-          );
           const isUnassigned = !ticket.assignedToUser;
 
           return (
             <div
               key={ticket.id}
               onClick={() => setSelectedTicket(ticket)}
-              className={`flex items-center justify-between gap-3 bg-white border border-[#E2E8F0] rounded-[5px] px-[16px] py-[12px] cursor-pointer hover:border-[#06B6D4] hover:shadow-sm transition-all duration-150
-                ${isHighPriority ? "border-l-[3px] border-l-[#06B6D4]" : ""}`}
+              className="group bg-white border border-[#E2E8F0] px-[20px] py-[16px] cursor-pointer hover:border-[#06B6D4] hover:shadow-md transition-all duration-150"
             >
-              <div className="flex items-center gap-[12px] min-w-0">
-                <span className="text-[11px] font-mono text-[#94A3B8] flex-shrink-0 hidden sm:block">
-                  {ticket.referenceNo || `#${ticket.id}`}
-                </span>
-                <p className="text-[13px] font-medium text-[#2D3E52] truncate">
-                  {ticket.title}
-                </p>
+              <div className="flex items-start justify-between gap-4">
+                {/* left: ref + title + category */}
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-[10px] mb-[4px]">
+                    <span className="text-[11px] font-mono text-[#94A3B8]">
+                      {ticket.referenceNo || `#${ticket.id}`}
+                    </span>
+                    <span className="text-[11px] text-[#CBD5E1]">•</span>
+                    <span className="text-[11px] text-[#94A3B8] uppercase tracking-wider">
+                      {ticket.category}
+                    </span>
+                  </div>
+                  <p className="text-[15px] font-medium text-[#1E2A38] truncate group-hover:text-[#06B6D4] transition-colors">
+                    {ticket.title}
+                  </p>
+                </div>
+
+                {/* right: badges */}
+                <div className="flex items-center gap-[8px] flex-shrink-0">
+                  <span
+                    className={`text-[11px] px-[10px] py-[4px] rounded-full font-medium uppercase tracking-wider ${getPriorityStyles(ticket.priority)}`}
+                  >
+                    {ticket.priority}
+                  </span>
+                  <span
+                    className={`text-[11px] px-[10px] py-[4px] rounded-full font-medium uppercase tracking-wider ${getStatusStyles(ticket.status)}`}
+                  >
+                    {ticket.status}
+                  </span>
+                </div>
               </div>
 
-              <div className="flex items-center gap-[8px] flex-shrink-0">
-                <span
-                  className={`hidden sm:inline-flex text-[11px] px-[8px] py-[2px] rounded-full font-medium uppercase tracking-wider ${getPriorityStyles(ticket.priority)}`}
-                >
-                  {ticket.priority}
-                </span>
-                <span
-                  className={`inline-flex text-[11px] px-[8px] py-[2px] rounded-full font-medium uppercase tracking-wider ${getStatusStyles(ticket.status)}`}
-                >
-                  {ticket.status}
-                </span>
-                <span className="hidden md:block text-[11px] text-[#94A3B8]">
-                  {formatDate(ticket.createdAt)}
-                </span>
+              {/* bottom row: date + assignment */}
+              <div className="flex items-center justify-between mt-[14px] pt-[12px] border-t border-[#F1F5F9]">
+                <div className="flex items-center gap-[16px] text-[12px] text-[#94A3B8]">
+                  <span>{formatDate(ticket.createdAt)}</span>
+                  {!isUnassigned && (
+                    <span className="text-[#475569]">
+                      Assigned to{" "}
+                      <span className="font-medium">
+                        {ticket.assignedToUser}
+                      </span>
+                    </span>
+                  )}
+                </div>
 
                 {isUnassigned && (
                   <select
                     defaultValue=""
                     onClick={(e) => e.stopPropagation()}
                     onChange={(e) => assignTicket(ticket.id, e.target.value)}
-                    className="text-[11px] h-[26px] rounded-[6px] border border-[#E2E8F0] px-[6px] bg-white text-[#475569] focus:outline-none focus:ring-1 focus:ring-[#06B6D4]"
+                    className="text-[12px] h-[32px] rounded-[6px] border border-[#E2E8F0] px-[10px] bg-[#F8FAFC] text-[#475569] font-medium focus:outline-none focus:border-[#06B6D4] focus:ring-1 focus:ring-[#06B6D4] cursor-pointer"
                   >
                     <option value="" disabled>
                       Assign to...
@@ -297,9 +315,12 @@ export function Tickets() {
         })}
 
         {tickets.length === 0 && (
-          <p className="text-[13px] text-[#94A3B8] text-center py-[40px]">
-            No tickets found.
-          </p>
+          <div className="text-center py-[60px]">
+            <p className="text-[14px] text-[#94A3B8]">No tickets found.</p>
+            <p className="text-[12px] text-[#CBD5E1] mt-[4px]">
+              Try adjusting your filters.
+            </p>
+          </div>
         )}
       </div>
     </>

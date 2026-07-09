@@ -52,6 +52,22 @@ namespace HelpDesk.Presentation.Controllers
 
 
         }
+
+        [HttpGet("roles")]
+        public async Task<IActionResult> getRoles()
+        {
+            var roles = await _db.Roles
+                .Select(r => new
+                {
+                    r.Id,
+                    r.Name
+                })
+                .OrderBy(r => r.Name)
+                .ToListAsync();
+
+            return Ok(roles);
+        }
+
         [HttpGet("assignable-users")]
         public async Task<IActionResult> getAssignableUsers()
         {
