@@ -31,6 +31,9 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
+
+
+builder.Services.AddScoped<HelpDesk.Core.Services.INotificationService, HelpDesk.Core.Services.NotificationService>();
 //register the created jwt service 
 builder.Services.AddScoped<HelpDesk.Infrastructure.Security.JwtTokenGenerator>();
 
