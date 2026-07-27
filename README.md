@@ -272,7 +272,7 @@ The system separates responsibilities into different layers:
 
 The following diagram represents the overall interaction between the main system components:
 
-![System Workflow](assets/System%20Workflow.png)
+![System Workflow](Frontend/src/assets/System%20Workflow.png)
 
 ---
 
@@ -332,7 +332,7 @@ The API is documented and testable using **Swagger/OpenAPI**.
 
 ### API Documentation
 
-![Swagger UI](assets/SwaggerUI.png)
+![Swagger UI](Frontend/src/assets/SwaggerUI.png)
 
 ---
 
@@ -340,23 +340,23 @@ The API is documented and testable using **Swagger/OpenAPI**.
 
 ### Authentication
 
-![Login](assets/screenshots/login.png)
+![Login](Frontend/src/assets/screenshots/login.png)
 
 ### Employee Dashboard
 
-![Employee Dashboard](assets/screenshots/employee-dashboard.png)
+![Employee Dashboard](Frontend/src/assets/screenshots/employee-dashboard.png)
 
 ### Create Ticket
 
-![Create Ticket](assets/screenshots/create-ticket.png)
+![Create Ticket](Frontend/src/assets/screenshots/create-ticket.png)
 
 ### Ticket Management
 
-![Ticket Details](assets/screenshots/ticket-details.png)
+![Ticket Details](Frontend/src/assets/screenshots/ticket-details.png)
 
 ### IT Support Dashboard
 
-![IT Support Dashboard](assets/screenshots/support-dashboard.png)
+![IT Support Dashboard](Frontend/src/assets/screenshots/support-dashboard.png)
 
 <!-- ### Manager Dashboard
 
@@ -364,7 +364,7 @@ The API is documented and testable using **Swagger/OpenAPI**.
 
 ### Admin Dashboard
 
-![Admin Dashboard](assets/screenshots/admin-dashboard.png)
+![Admin Dashboard](Frontend/src/assets/screenshots/admin-dashboard.png)
 
 ---
 
