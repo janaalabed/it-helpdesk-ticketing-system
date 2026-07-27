@@ -167,57 +167,6 @@ The application implements four distinct roles, each with dedicated responsibili
 | **Manager**          | Monitor dashboards, assign tickets, supervise workloads, and review reports |
 | **Administrator**    | Manage users, roles, system settings, and system monitoring                 |
 
----
-
-## Ticket Workflow
-
-The core ticket lifecycle follows the workflow below:
-
-```text
-┌──────────────┐
-│   Employee   │
-└──────┬───────┘
-       │
-       ▼
-┌────────────────┐
-│  Create Ticket │
-└───────┬────────┘
-        │
-        ▼
-┌───────────────────────────┐
-│ IT Support Agent Receives │
-│         the Ticket        │
-└────────────┬──────────────┘
-             │
-             ▼
-      ┌──────────────┐
-      │ Work on      │
-      │ Ticket       │
-      └──────┬───────┘
-             │
-             ▼
-      ┌─────────────────────┐
-      │ Escalation Required?│
-      └──────┬───────┬──────┘
-             │       │
-            No      Yes
-             │       │
-             ▼       ▼
-       ┌──────────┐ ┌──────────────┐
-       │ Resolve  │ │   Escalate   │
-       │ & Close  │ │    Ticket    │
-       └──────────┘ └───────┬──────┘
-                            │
-                            ▼
-                    ┌────────────────┐
-                    │ Further        │
-                    │ Handling       │
-                    └────────────────┘
-```
-
-Managers supervise the workflow through **ticket assignment, team monitoring, workload management, and reporting**.
-
-Administrators manage the overall platform through **user management, role management, system settings, and system monitoring**.
 
 ---
 
